@@ -111,15 +111,21 @@ visual impact is important. Pythontutor is additionally restricted by its
 support for only six programming languages, limited customization options, and
 minimal library of visualization methods.
 
-\subsection{LLVM \texttt{dot-cfg} Pass with Graphviz}
-\TODO{critical} Same as previous section but for Graphviz. Potentially add
-subsection explaining LLVM in general.
+\subsection{LLVM Analysis and Transform Passes}
+A much more flexible method for visualizing code is introduced via LLVM's
+built-in options for passes, included as part of their optimization features.
+These passes allow developers to intricately inspect specific aspects of their
+code at the IR level, such as control flow graphs, data flow graphs, memory
+allocations, and other static analysis.
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\linewidth]{CFG.PNG}}
-\caption{Example LLVM \texttt{dot-cfg} pass output.}
+\caption{Example Control Flow Graph using LLVM \texttt{-opt=dot-cfg} pass.}
 \label{fig}
 \end{figure}
+
+\TODO{critical} Double down on LLVM benefits, then talk shit about its simple
+output and being less approachable/accessible.
 
 
 
