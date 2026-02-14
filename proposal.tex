@@ -6,18 +6,25 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
-\usepackage{xcolor}
-\usepackage[table,xcdraw, dvipsnames]{xcolor}
+\usepackage[table,xcdraw,dvipsnames]{xcolor}
 \usepackage{hyperref}
 \usepackage{bookmark}
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{colortbl}
+\usepackage{etoolbox}
+
+\newcommand{\TODO}[1]{\textbf{TODO (#1): }}
+\newcommand{\CCS}[1]{%
+  \renewcommand*{\do}[1]{##1$\rightarrow$} % Reset separator
+  \docsvlist{#1}% Parse the comma-separated list
+}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \graphicspath{ {./images/} }
 
-\newcommand{\TODO}[1]{\textbf{TODO (#1): }}
+
 \begin{document}
 
 \title{Presentable Debugging with LLVManim}
@@ -42,11 +49,11 @@ Ebenezer\_Oloyede@student.uml.edu}
 Lowell, Massachusetts, USA \\
 Lily\_Grippo@student.uml.edu}
 \and
-\IEEEauthorblockN{Name Surname}
+\IEEEauthorblockN{Mohammad Ahmed}
 \IEEEauthorblockA{\textit{Dept. of Computer Science} \\
 \textit{University of Massachusetts Lowell}\\
 Lowell, Massachusetts, USA \\
-email address or ORCID}
+ahmedzubair16dec@gmail.com}
 }
 
 \maketitle
@@ -56,11 +63,13 @@ LLVManim is a code visualization tool that generates aesthetically pleasing anim
 \end{abstract}
 
 \begin{IEEEconcepts}
-\TODO{non-critical} - https://dl.acm.org/ccs
+Human-centered computing $\rightarrow$ Visualization $\rightarrow$ Visualization systems and tools $\rightarrow$ Visualization toolkits;
+$\bullet$~Software and its engineering $\rightarrow$ Software notations and tools $\rightarrow$ Compilers;
+$\bullet$~Applied computing $\rightarrow$ Education $\rightarrow$ Interactive learning environments
 \end{IEEEconcepts}
 
 \begin{IEEEkeywords}
-\TODO{non-critical}
+program visualization, code animation, LLVM, static analysis, control flow graphs, memory visualization, educational tools, Manim, compiler infrastructure, presentation tools
 \end{IEEEkeywords}
 
 
@@ -133,9 +142,9 @@ The barrier extends beyond mere aesthetics. Interpreting these diagrams requires
 In essence, LLVM provides extraordinarily powerful analysis capabilities but pairs them with visualization tools that assume their primary consumer is someone who already understands what they're looking at. This creates a frustrating gap: we can automatically extract rich semantic information about program behavior, but we cannot automatically present that information in a way that serves educational or presentational contexts. LLVManim aims to bridge this gap by maintaining LLVM's analytical rigor while replacing its austere output with animations designed for human communication rather than machine precision.
 
 \section{Manim}
-The Manim library was originally developed by Grant Sanderson\cite{3b1b-website} for his educational YouTube channel "3Blue1Brown", specifically for animating math and computer science concepts.\cite{3b1b-channel} His beginner-friendly animations assisted him in becoming one of the more well-known online personalities in these fields and have helped countless others improve their understanding of complex topics. This history makes it a prime candidate as a tool for creating high-quality educational/informational presentations, but many are unable or unwilling to spend the time and effort it takes to create custom animations using a third-party Python library.
+The Manim library was originally developed by Grant Sanderson\cite{3b1b-website} for his popular educational YouTube channel "3Blue1Brown" to create animations of mathematical and computer science concepts.\cite{3b1b-channel} His approachable animations have helped him become one of the most well-known online educators in these fields and have helped countless others understand complex topics more easily. Given this history, Manim represents an excellent candidate for creating high-quality educational presentations. Unfortunately, many potential users lack either the ability or the willingness to invest the substantial time required to create custom animations with this Python library.
 
-While tools like PythonTutor and LLVM address the technical challenge of extracting and displaying program information, they fall short in making that information genuinely engaging. This is where Manim distinguishes itself, not as a code analysis tool, but as a demonstration of what is possible when visualization prioritizes both clarity and aesthetic appeal.
+While tools like PythonTutor and LLVM successfully address the technical challenge of extracting and displaying program information, they fall short in making that information genuinely engaging. This is where Manim distinguishes itself, not as a code analysis tool, but as a demonstration of what becomes possible when visualization prioritizes both clarity and aesthetic appeal.
 
 Since its inception in 2015, the 3Blue1Brown channel has gained more than 6 million subscribers and hundreds of millions of views. Individual videos on topics such as linear algebra, calculus, and even neural networks regularly reach audiences of millions. Sanderson's approach, using smooth, precisely choreographed animations to build intuition about abstract concepts, has earned him widespread recognition in the educational community; he won a 2020 YouTube Streamy Award for Education. The key to all of these animations is Manim, an animation engine written in Python and maintained by Sanderson himself.
 
@@ -190,7 +199,7 @@ visualizing fundamentals, such as control flow and memory allocations.
     \item \textbf{Basic Animation Customization:} Allow users to customize the
     appearance of animations (e.g. color schemes, animation speed, etc.) to suit
     different presentation contexts.
-    \item \TODO{non-critical} Come up with more core features.
+    % \item \TODO{non-critical} Come up with more core features.
 \end{itemize}
 
 \textbf{Major features (required to realize the intended product):}
@@ -201,7 +210,7 @@ visualizing fundamentals, such as control flow and memory allocations.
     \item \textbf{Basic Interactive Features:} Implement basic interactivity in
     the generated animations, such as pausing, stepping through execution, or
     highlighting specific paths.
-    \item \TODO{non-critical} Come up with more major features.
+    % \item \TODO{non-critical} Come up with more major features.
 \end{itemize}
 
 \textbf{Stretch features (nice‑to‑have if time permits):}
@@ -211,7 +220,7 @@ visualizing fundamentals, such as control flow and memory allocations.
     \item \textbf{Advanced Interactive Features:} Implement advanced
     interactivity in the generated animations, such as allowing users to click
     on nodes to see underlying IR code or variable values.
-    \item \TODO{non-critical} Come up with more stretch features.
+    % \item \TODO{non-critical} Come up with more stretch features.
 \end{itemize}
 
 
@@ -238,7 +247,7 @@ Key operations:
     \item \textbf{IR Parsing:} Load LLVM modules and extract functions, basic blocks, and instructions.
     \item \textbf{Control Flow Extraction:} Build CFGs by analyzing branch instructions and identifying successor relationships between blocks.
     \item \textbf{Metadata Collection:} Extract debug information like source line numbers, variable names, and types from LLVM debug intrinsics.
-    \item \textbf{Memory Operation Identification:} Catalog \texttt{load}, \texttt{store}, \texttt{alloca}, and \texttt{call} instructions for tracking memory access and stack operations.
+    \item \textbf{Memory Operation Identification:} Catalog memory-related instructions including \texttt{load}, \texttt{store}, \texttt{alloca}, and \texttt{call} for tracking memory access patterns and stack operations.
 \end{itemize}
 
 Output: Structured representation with CFG, instruction list, and metadata stored in Python dictionaries mapping basic block IDs to instruction sequences.
@@ -270,7 +279,7 @@ Key operations:
 \begin{itemize}
     \item \textbf{Manim Code Generation:} Translate scene graph into Python code defining a Manim \texttt{Scene} class. Visual elements become \texttt{Mobject} instances with animation commands.
     \item \textbf{Rendering Pipeline:} Invoke Manim to produce MP4 video or enable interactive preview with keyboard controls.
-    \item \textbf{Customization API:} Expose configuration via command-line flags and YAML:
+    \item \textbf{Customization API:} Provide configuration options using command line flags and YAML files:
     \begin{itemize}
         \item \texttt{--speed <factor>}: Animation playback speed
         \item \texttt{--palette <name>}: Color scheme (dark, light, colorblind)
@@ -282,17 +291,22 @@ Key operations:
 \subsubsection{User Interface}
 Command-line interface with automatic compilation:
 
+{\small
 \begin{verbatim}
 # Visualize C program
-llvmanim factorial.c --mode cfg --output demo.mp4
+llvmanim factorial.c --mode cfg 
+    --output demo.mp4
 
 # Custom speed and colors
-llvmanim quicksort.c --mode memory --speed 0.75 
-    --palette dark --output sort.mp4
+llvmanim quicksort.c --mode memory 
+    --speed 0.75 --palette dark 
+    --output sort.mp4
 
 # Interactive mode
-llvmanim recursive.c --mode trace --interactive
+llvmanim recursive.c --mode trace 
+    --interactive
 \end{verbatim}
+}
 
 The tool compiles .c/.cpp files to LLVM IR automatically or processes .ll files directly. Error messages indicate unsupported features with workarounds.
 
@@ -313,45 +327,44 @@ The tool compiles .c/.cpp files to LLVM IR automatically or processes .ll files 
 \textcolor{white}{\textbf{Week}} & \textcolor{white}{\textbf{Task}} \\ \hline
 $W_1$    [$2/08 - 2/14$] & $\bullet$ Project proposal draft complete.\newline
                            $\bullet$ Development environment setup. \\ \hline
-$W_2$    [$2/15 - 2/21$] & $\bullet$ \\ \hline
-$W_3$    [$2/22 - 2/28$] & $\bullet$ \\ \hline
-$W_4$    [$3/01 - 3/07$] & $\bullet$ \\ \hline
-$W_5$    [$3/08 - 3/14$] & $\bullet$ \\ \hline
-$W_6$    [$3/15 - 3/21$] & $\bullet$ \\ \hline
-$W_7$    [$3/22 - 3/28$] & $\bullet$ \\ \hline
-$W_8$    [$3/29 - 4/04$] & $\bullet$ \\ \hline
-$W_9$    [$4/04 - 4/10$] & $\bullet$ \\ \hline
-$W_{10}$ [$4/11 - 4/17$] & $\bullet$ \\ \hline
+$W_2$    [$2/15 - 2/21$] & $\bullet$ LLVM Parsing \\ \hline
+$W_3$    [$2/22 - 2/28$] & $\bullet$ Stack Frame Animation \\ \hline
+$W_4$    [$3/01 - 3/07$] & $\bullet$ Heap Animation \\ \hline
+$W_5$    [$3/08 - 3/14$] & $\bullet$ User Interface\\ \hline
+$W_6$    [$3/15 - 3/21$] & $\bullet$ Interactive feature: Step,Pause \\ \hline
+$W_7$    [$3/22 - 3/28$] & $\bullet$ Animation Speed and Color \\ \hline
+$W_8$    [$3/29 - 4/04$] & $\bullet$ Code Testing \\ \hline
+$W_9$    [$4/04 - 4/10$] & $\bullet$ Code Testing\\ \hline
+$W_{10}$ [$4/11 - 4/17$] & $\bullet$ Additional Feature\\ \hline
 \end{tabularx}
 \vspace{0.1cm}
 \caption{Projected timeline for LLVManim Development.}
 \end{table}
 
 \section{Feedback}
+\begin{quotation} [1]
 "The figures are helpful for showing how the existing tools work, but for the
 proposal make sure you show how you want the visualized code to work.  This
 could be through making a mockup or setting up input for Manim to generate
 something that looks like what you want.  You should also think about the
 pipeline for what data you are planning on getting from LLVM, how you are going
-to get it, and how you will feed it into Manim.
+to get it, and how you will feed it into Manim."
+\end{quotation}
 
-You have figures for some existing tools.  Make sure you talk about them in the
-proposal and what their limitations are."\\
-\TODO{critical} describe any feedback you did NOT take action on, with a brief
-justification for why (for example, if some other project related to your
-proposal was suggested, but it is not, this is where you would say why it was
-not related). Include ALL feedback you have received on the project at any
-point, whether from the instructor or your peers. If you have addressed every
-piece of feedback and made changes in response, write “We have addressed all
-feedback.”
+\noindent This feedback remains unaddressed at present, primarily due to time constraints during the proposal development phase. We intend to create a mockup of the intended output in the near future to better illustrate our vision for the final product.
+
+\noindent\hrulefill
+
+\begin{quotation} [2]
+  "You have figures for some existing tools.  Make sure you talk about them in the proposal and what their limitations are."
+\end{quotation}
+
+% \TODO{critical} describe any feedback you did NOT take action on, with a brief justification for why (for example, if some other project related to your proposal was suggested, but it is not, this is where you would say why it was not related). Include ALL feedback you have received on the project at any point, whether from the instructor or your peers. If you have addressed every piece of feedback and made changes in response, write “We have addressed all feedback.”
 
 
 \section*{Acknowledgment}
 
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
+We would like to thank Dr. James Daly for his guidance, feedback, and support throughout the development of this work.
 
 
 \bibliographystyle{IEEEtran}
