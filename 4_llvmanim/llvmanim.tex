@@ -1,0 +1,151 @@
+By providing a solution to quickly and easily create data-based animations,
+LLVManim aims to bridge the gap between these two concepts:
+\begin{enumerate}
+    \item Methods exist to quickly generate code visualizations, but they are
+    unappealing for presentation purposes.
+    \item The Manim library can make visually impressive animations, but using
+    it is time consuming.
+\end{enumerate}
+Educators and tech leads alike can rejoice in spicing up their PowerPoints
+without needing to compromise between style and accessibility.
+
+\subsection{Project Goals}
+The primary goal of LLVManim is to create a lightweight pipeline for converting
+LLVM IR and runtime traces into concise, animated explanations of program
+behavior. As a proof-of-concept, the initial version of LLVManim will focus on
+visualizing fundamentals, such as control flow and memory allocations.
+
+\textbf{Proof-of-Concept Targets:}
+\begin{itemize}
+    \item \textbf{IR Instruction Coverage:} Support for the most common LLVM IR
+    instructions, such as \texttt{load}, \texttt{store}, \texttt{call}, and
+    basic arithmetic operations. This will allow LLVManim to visualize a wide
+    range of simple programs.
+    \item \textbf{Trace Event Mapping:} Correctly map $\geq 95\%$ of runtime
+    events (loads, stores, branches, calls, returns) to IR locations when debug
+    metadata is present.
+    \item \textbf{Customization Options:} Provide $\geq 4$ user-configurable
+    options $-$ Analysis method, animation speed, color palette, \& verbosity.
+    \item \textbf{Usability:} In a pilot study (6–8 participants), achieve
+    $\geq~80\%$ task completion for locating injected bugs.
+\end{itemize}
+
+\textbf{Core Features:}
+\begin{itemize}
+    \item \textbf{LLVM IR Parsing:} Extract control flow and memory access
+    information from LLVM IR, utilizing debug metadata when available.
+    \item \textbf{Manim Animation Generation:} Translate LLVM IR and trace
+    information into Manim scenes that visually represent control flow, stack
+    frames, heap allocations, and data flow.
+    \item \textbf{User Interface:} Develop a simple command-line
+    interface that allows users to specify input files, select visualization
+    options, and generate animations with minimal configuration.
+    \item \textbf{Basic Animation Customization:} Allow users to customize the
+    appearance of animations (e.g. color schemes, animation speed, etc.) to suit
+    different presentation contexts.
+    % \item \TODO{non-critical} Come up with more core features.
+\end{itemize}
+
+\textbf{Major features (required to realize the intended product):}
+\begin{itemize}
+    \item \textbf{Advanced Animation Customization:} Allow users to customize
+    more aspects of the animations, such as layout styles, node shapes, or
+    animation effects.
+    \item \textbf{Basic Interactive Features:} Implement basic interactivity in
+    the generated animations, such as pausing, stepping through execution, or
+    highlighting specific paths.
+    % \item \TODO{non-critical} Come up with more major features.
+\end{itemize}
+
+\textbf{Stretch features (nice‑to‑have if time permits):}
+\begin{itemize}
+    \item \textbf{GUI:} Create a graphical user interface for users who prefer
+    not to use the command line.
+    \item \textbf{Advanced Interactive Features:} Implement advanced
+    interactivity in the generated animations, such as allowing users to click
+    on nodes to see underlying IR code or variable values.
+    % \item \TODO{non-critical} Come up with more stretch features.
+\end{itemize}
+
+
+\subsection{Implementation Plan}
+We approach the implementation of LLVManim as a 3-layer architecture:
+\textbf{Ingestion}, \textbf{Transformation}, and \textbf{Presentation}. The
+Ingestion layer collects LLVM IR and metadata. The transformation layer maps the
+collected IR constructs and trace events to an intermediate scene graph. The
+presentation layer renders the scene graph with Manim animations and exposes a
+small API for interactive playback.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{Model_Diagram}}
+\caption{Model diagram illustrating the three-layer architecture of LLVManim. The Ingestion layer collects LLVM IR and metadata, the Transformation layer maps it to an intermediate scene graph, and the Presentation layer renders it with Manim animations.}
+\label{fig:model_diagram}
+\end{figure}
+
+\subsubsection{User Interface}
+Command-line interface with automatic compilation:
+
+{\small
+\begin{verbatim}
+# Visualize C program
+llvmanim factorial.c --mode cfg 
+    --output demo.mp4
+
+# Custom speed and colors
+llvmanim quicksort.c --mode memory 
+    --speed 0.75 --palette dark 
+    --output sort.mp4
+
+# Interactive mode
+llvmanim recursive.c --mode trace 
+    --interactive
+\end{verbatim}
+}
+
+\subsubsection{Presentation Layer}
+The Presentation layer renders the scene graph using Manim.
+
+Key operations:
+\begin{itemize}
+    \item \textbf{Manim Code Generation:} Translate scene graph into Python code defining a Manim \texttt{Scene} class. Visual elements become \texttt{Mobject} instances with animation commands.
+    \item \textbf{Rendering Pipeline:} Invoke Manim to produce MP4 video or enable interactive preview with keyboard controls.
+    \item \textbf{Customization API:} Provide configuration options using command line flags and YAML files:
+    \begin{itemize}
+        \item \texttt{--speed <factor>}: Animation playback speed
+        \item \texttt{--palette <name>}: Color scheme (dark, light, colorblind)
+        \item \texttt{--mode <type>}: Visualization mode (cfg, memory, trace)
+        \item \texttt{--verbose}: Include IR instruction text
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Transformation Layer}
+The Transformation layer maps LLVM constructs to an intermediate scene graph for Manim rendering.
+
+Key operations:
+\begin{itemize}
+    \item \textbf{Scene Graph Construction:} Create hierarchical representation where nodes correspond to visual elements (basic blocks, stack frames, memory cells) with properties for position, appearance, and timing.
+    \item \textbf{Layout Algorithm:} Apply hierarchical layout to position CFG nodes while minimizing edge crossings and maintaining logical flow direction. We use a modified Sugiyama framework with constraints for common patterns like if-else branches and loop back-edges.
+    \item \textbf{Instruction-to-Animation Mapping:} Define animation primitives for each LLVM instruction:
+    \begin{itemize}
+        \item \texttt{alloca}: Create stack frame with variable label
+        \item \texttt{load}/\texttt{store}: Animate arrow to/from memory location
+        \item \texttt{call}: Push new stack frame with fade-in
+        \item \texttt{ret}: Pop stack frame with fade-out
+        \item \texttt{br}: Highlight control flow edge with color change
+    \end{itemize}
+    \item \textbf{Timing Coordination:} Calculate timing offsets for animation events (default 1 second per instruction, user-configurable).
+\end{itemize}
+
+\subsubsection{Ingestion Layer}
+The Ingestion layer extracts program structure from LLVM IR. We use the \texttt{llvmlite} Python binding to parse .ll files generated by clang with the \texttt{-g} flag for debug metadata.
+
+Key operations:
+\begin{itemize}
+    \item \textbf{IR Parsing:} Load LLVM modules and extract functions, basic blocks, and instructions.
+    \item \textbf{Control Flow Extraction:} Build CFGs by analyzing branch instructions and identifying successor relationships between blocks.
+    \item \textbf{Metadata Collection:} Extract debug information like source line numbers, variable names, and types from LLVM debug intrinsics.
+    \item \textbf{Memory Operation Identification:} Catalog memory-related instructions including \texttt{load}, \texttt{store}, \texttt{alloca}, and \texttt{call} for tracking memory access patterns and stack operations.
+    \item \textbf{Output:} Structured representation with CFG, instruction list, and metadata stored in Python dictionaries mapping basic block IDs to instruction sequences.
+\end{itemize}
+
+The tool compiles .c/.cpp files to LLVM IR automatically or processes .ll files directly. Error messages indicate unsupported features with workarounds.
