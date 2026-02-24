@@ -14,7 +14,7 @@ The primary goal of LLVManim is to create a lightweight pipeline for converting
 LLVM IR and runtime traces into concise, animated explanations of program
 behavior. As a proof-of-concept, the initial version of LLVManim will focus on
 visualizing fundamentals, such as control flow and memory allocations.
-
+\newpage
 \textbf{Proof-of-Concept Targets:}
 \begin{itemize}
     \item \textbf{IR Instruction Coverage:} Support for the most common LLVM IR
@@ -124,7 +124,7 @@ The Transformation layer maps LLVM constructs to an intermediate scene graph for
 Key operations:
 \begin{itemize}
     \item \textbf{Scene Graph Construction:} Create hierarchical representation where nodes correspond to visual elements (basic blocks, stack frames, memory cells) with properties for position, appearance, and timing.
-    \item \textbf{Layout Algorithm:} Apply hierarchical layout to position CFG nodes while minimizing edge crossings and maintaining logical flow direction. We use a modified Sugiyama framework with constraints for common patterns like if-else branches and loop back-edges.
+    \item \textbf{Layout Algorithm:} Apply hierarchical layout to position control-flow graph (CFG) nodes while minimizing edge crossings and maintaining logical flow direction. We use a modified Sugiyama framework with constraints for common patterns like if-else branches and loop back-edges.
     \item \textbf{Instruction-to-Animation Mapping:} Define animation primitives for each LLVM instruction:
     \begin{itemize}
         \item \texttt{alloca}: Create stack frame with variable label
