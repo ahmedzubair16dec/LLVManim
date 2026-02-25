@@ -1,0 +1,29 @@
+\subsection{Technical Risks}
+\begin{itemize}
+  \item \textbf{LLVM IR Complexity:} LLVM IR supports a wide range of constructs, including vector operations, intrinsics, and optimization-introduced transformations. LLVManim targets a common subset of instructions for the initial implementation.\par
+  {\raggedright\textit{Risk:} Unsupported constructs may cause parsing failures or incomplete visualizations.\par}
+  {\raggedright\textit{Mitigation:} Restrict the MVP to unoptimized \texttt{-O0} IR and provide clear diagnostic messages when encountering unsupported instructions.\par}
+
+  \item \textbf{Manim Performance:} Manim provides high-quality animations but can be computationally expensive, especially for scenes with many objects or transitions.\par
+  {\raggedright\textit{Risk:} Long render times may slow development and limit iterative testing.\par}
+  {\raggedright\textit{Mitigation:} Use low-quality preview rendering during development and reserve high-quality output for final deliverables.\par}
+
+  \item \textbf{Cross-Platform Compatibility:} Achieving consistent LLVManim behavior across operating systems and development environments can be challenging.\par
+  {\raggedright\textit{Risk:} Platform-specific issues may arise and cause inconsistent behavior or failures.\par}
+  {\raggedright\textit{Mitigation:} Use cross-platform libraries and conduct testing on multiple platforms to ensure compatibility.\par}
+
+  \item \textbf{Dependency Fragility:} LLVManim depends on Clang, llvmlite, and Manim, each of which may introduce version incompatibilities or platform-specific issues.\par
+  {\raggedright\textit{Risk:} Changes in LLVM or Manim APIs could break LLVManim's functionality.\par}
+  {\raggedright\textit{Mitigation:} Provide a reproducible environment via containerization or a standardized setup script.\par}
+\end{itemize}
+
+\subsection{Architectural Risks}
+\begin{itemize}
+  \item \textbf{Ambitious Feature Set:} The proposal includes core, major, and stretch features. Several planned capabilities, including interactive stepping, advanced customization, and trace mapping above 95\%, are substantial undertakings.\par
+  {\raggedright\textit{Risk:} Delivering the complete feature set within the available project timeline may be difficult.\par}
+  {\raggedright\textit{Mitigation:} Prioritize an MVP pipeline that covers IR ingestion, scene graph construction, and basic animation before implementing advanced capabilities.\par}
+
+  \item \textbf{User Expectations for Customization:} Educators and presenters often need fine-grained control over pacing, color schemes, and layout choices.\par
+  {\raggedright\textit{Risk:} Limited customization may reduce adoption and may fail to meet expectations for presentation-quality output.\par}
+  {\raggedright\textit{Mitigation:} Provide a minimal but meaningful set of customization flags (e.g., palette, speed, verbosity) in the initial release.\par}
+\end{itemize}

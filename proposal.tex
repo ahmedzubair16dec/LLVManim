@@ -15,6 +15,18 @@
 \usepackage{etoolbox}
 
 \newcommand{\TODO}[1]{\textbf{TODO (#1): }}
+\newcounter{feedbackcount}
+\newcommand{\feedbackset}[1]{\setcounter{feedbackcount}{#1}}
+\newcommand{\feedback}[2]{%
+    \refstepcounter{feedbackcount}%
+    \begin{quotation}
+      [\arabic{feedbackcount}]---\textit{#1}
+    \end{quotation}%
+    \ifstrempty{#2}{}{%
+        \noindent #2\par
+    }%
+}
+\newcommand{\feedbackdivider}{\noindent\hrulefill\par}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -79,9 +91,13 @@ program visualization, code animation, LLVM, static analysis, control flow graph
 
 \section{LLVManim}
 \input{4_llvmanim/llvmanim.tex}
+
+\section{Risk Evaluation}
+\input{5_risk_evaluation/risk_evaluation.tex}
+
 \newpage
 \section*{Projected Timeline}
-\input{5_timeline/timeline.tex}
+\input{timeline.tex}
 
 \section*{Acknowledgment}
 We would like to thank Dr. James Daly for his guidance, feedback, and support throughout the development of this work.
@@ -90,8 +106,8 @@ We would like to thank Dr. James Daly for his guidance, feedback, and support th
 \bibliography{references}
 \newpage
 \section*{Feedback}
-\input{6_feedback/feedback.tex}
+\input{feedback.tex}
 \vspace{2em}
-\textbf{HOURS SPENT:} \~26 hours
+\textbf{HOURS SPENT:} \textasciitilde 26 Hours
 
 \end{document}
