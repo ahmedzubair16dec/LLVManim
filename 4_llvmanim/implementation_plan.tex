@@ -76,6 +76,8 @@ Key operations:
     \item \textbf{Output:} Produce a structured representation of the program's control flow and memory operations for the Transformation layer to convert into a scene graph.
 \end{itemize}
 
+LLVManim will target a well-defined subset of LLVM IR, including standard control flow constructs (branches and loops), common memory operations (\texttt{alloca}, \texttt{load}, and \texttt{store}), and basic arithmetic and comparison instructions. Unsupported constructs like intrinsics, exception handling, or vector operations will be skipped with a warning message indicating which instructions were omitted, keeping the tool usable even on programs that use unsupported features.
+
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\linewidth]{MockOut}}
 \caption{Mock output of LLVManim showing a basic increment operation.}
