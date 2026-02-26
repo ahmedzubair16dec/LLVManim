@@ -52,7 +52,7 @@ The Transformation layer maps LLVM constructs to an intermediate scene graph for
     
     \item \textbf{Output (Application Facade):} Generated Manim instructions, sent to the Presentation layer for rendering.
 
-    \item \textbf{Timing Coordination (optional):} Use parsed profiling data to calculate timing offsets for animation events (user-configurable).
+    \item \textbf{(Optional) Timing Coordination:} Use parsed profiling data to calculate timing offsets for animation events (user-configurable).
 \end{itemize}
 
 
@@ -69,7 +69,7 @@ The Ingestion layer extracts program structure from LLVM IR. We use the \texttt{
 
     \item \textbf{Output:} Structured representation of the program's control flow and memory operations for the Transformation layer to convert into a Manim scene.
     
-    \item \textbf{Dynamic Data Collection (Optional):} Extract instruction timing data from LLVM profiling tools, such as \texttt{LLVM-XRay} \cite{llvm_xray}, to enable performance-based animation timing.
+    \item \textbf{(Optional) Dynamic Data Collection:} Extract instruction timing data from LLVM profiling tools, such as \texttt{LLVM-XRay} \cite{llvm_xray}, to enable performance-based animation timing.
 \end{itemize}
 
 LLVManim will target a well-defined subset of LLVM IR, including standard control flow constructs (branches and loops), common memory operations (\texttt{alloca}, \texttt{load}, and \texttt{store}), and basic arithmetic and comparison instructions. Unsupported constructs like intrinsics, exception handling, or vector operations will be skipped with a warning message indicating which instructions were omitted, keeping the tool usable even on programs that use unsupported features.
