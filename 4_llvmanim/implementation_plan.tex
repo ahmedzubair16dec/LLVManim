@@ -16,22 +16,18 @@ The Presentation layer renders the scene graph using Manim and provides a simple
     # Visualize C program
     llvmanim factorial.c --mode cfg
         --output demo.mp4
-
     # Custom speed and colors
     llvmanim quicksort.c --mode memory
         --speed 0.75 --palette dark
         --output sort.mp4
-
     # Interactive mode
     llvmanim recursive.c --mode trace
         --interactive
     \end{verbatim}
     }
-
+    The CLI is intended for both developers integrating LLVManim into existing workflows and educators preparing course material. When the tool encounters unsupported IR constructs, missing debug metadata, or malformed input, it will emit a descriptive error message and continue processing the remainder of the program where possible.
     \item \textbf{Manim Code Generation:} Translate scene graph into Python code defining a Manim \texttt{Scene} class. Visual elements become \texttt{Mobject} instances with animation commands.
-
     \item \textbf{Rendering Pipeline:} Invoke Manim to produce MP4 video or enable interactive preview with keyboard controls.
-
     \item \textbf{Customization API:} Provide configuration options using command line flags and YAML files:
     \begin{itemize}
         \item \texttt{--speed <factor>}: Animation playback speed
