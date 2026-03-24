@@ -1,13 +1,54 @@
-digraph {
-    rankdir=TB
-    "init::entry" [label="init::entry\nrole: entry\nterm: ret\nmem: alloca, store, load, store"]
-    "double_1::entry" [label="double_1::entry\nrole: entry\nterm: ret\nmem: alloca, alloca, store, load, load, store, load, load, store, load, load"]
-    "main::entry" [label="main::entry\nrole: entry\nterm: br\nmem: alloca, alloca, alloca, store, store, store, load"]
-    "main::while.cond" [label="main::while.cond\nrole: branch\nterm: br\nmem: load, load"]
-    "main::while.body" [label="main::while.body\nrole: linear\nterm: br\nmem: load, store"]
-    "main::while.end" [label="main::while.end\nrole: exit\nterm: ret\nmem: load"]
-    "main::entry" -> "main::while.cond"
-    "main::while.cond" -> "main::while.end" [label="F"]
-    "main::while.cond" -> "main::while.body" [label="T"]
-    "main::while.body" -> "main::while.cond"
+digraph cfg {
+    rankdir=TB;
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=24, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=20];
+    bgcolor="white";
+    nodesep=0.5;
+    ranksep=0.6;
+
+    /* ── Function: init ──────────────────────── */
+    subgraph cluster_init {
+        label="init()";
+        style="filled,dashed,rounded"; fillcolor="#e8f5e9"; color="#43a047";
+        fontname="Helvetica"; fontsize=24; fontcolor="#1b5e20";
+        margin=12;
+
+        init_entry [label="entry\nrole: entry  |  term: ret\n4 mem ops",
+                    fillcolor="#c8e6c9", color="#2e7d32"];
+    }
+
+    /* ── Function: double_1 ──────────────────── */
+    subgraph cluster_double {
+        label="double_1()";
+        style="filled,dashed,rounded"; fillcolor="#e3f2fd"; color="#1e88e5";
+        fontname="Helvetica"; fontsize=24; fontcolor="#0d47a1";
+        margin=12;
+
+        double_entry [label="entry\nrole: entry  |  term: ret\n11 mem ops",
+                      fillcolor="#bbdefb", color="#1565c0"];
+    }
+
+    /* ── Function: main ──────────────────────── */
+    subgraph cluster_main {
+        label="main()";
+        style="filled,dashed,rounded"; fillcolor="#fff3e0"; color="#fb8c00";
+        fontname="Helvetica"; fontsize=24; fontcolor="#e65100";
+        margin=12;
+
+        main_entry [label="entry\nrole: entry  |  term: br\n7 mem ops",
+                    fillcolor="#ffe0b2", color="#ef6c00"];
+        while_cond [label="while.cond\nrole: branch  |  term: br\n2 mem ops",
+                    fillcolor="#ffe0b2", color="#ef6c00"];
+        while_body [label="while.body\nrole: linear  |  term: br\n2 mem ops",
+                    fillcolor="#ffe0b2", color="#ef6c00"];
+        while_end  [label="while.end\nrole: exit  |  term: ret\n1 mem op",
+                    fillcolor="#ffe0b2", color="#ef6c00"];
+    }
+
+    /* ── Control-flow edges ──────────────────── */
+    main_entry -> while_cond;
+    while_cond -> while_body [label="T"];
+    while_cond -> while_end  [label="F"];
+    while_body -> while_cond;
 }

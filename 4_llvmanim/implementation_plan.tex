@@ -1,47 +1,14 @@
-LLVManim is implemented as a three-layer pipeline: \textbf{Ingestion}, \textbf{Transformation}, and \textbf{Presentation}. Layer boundaries are enforced at build time by \texttt{import-linter}, ensuring that no module in a lower layer imports from a higher one. The entire codebase is written in Python~3.12 and managed with \texttt{uv}.
+LLVManim is implemented as a three-layer pipeline---\textbf{Ingestion}, \textbf{Transformation}, and \textbf{Render}---orchestrated by a dedicated \textbf{CLI} entry point. The high-level structure is shown in Fig.~\ref{fig:architecture_overview}. Layer boundaries are enforced at build time by \texttt{import-linter}, ensuring that no module in a lower layer imports from a higher one. The entire codebase is written in Python~3.12 and managed with \texttt{uv}.
 
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=\linewidth]{ModelDiagram}}
-\caption{Three-layer architecture of LLVManim. The Ingestion layer collects LLVM IR and metadata, the Transformation layer maps it to an intermediate scene graph, and the Presentation layer renders animations or exports artifacts.}
-\label{fig:model_diagram}
-\end{figure}
+\begin{figure*}[htbp]
+\centerline{\includegraphics[width=\textwidth]{architecture_overview}}
+\caption{High-level three-layer architecture of LLVManim. The Ingestion layer collects LLVM IR and metadata, the Transformation layer maps it to an intermediate scene graph, and the Rendering layer renders animations or exports artifacts.}
+\label{fig:architecture_overview}
+\end{figure*}
 
-\subsubsection{Ingestion Layer}
-The Ingestion layer extracts program structure from LLVM IR. It uses the \texttt{llvmlite}\cite{llvmlite} Python binding to parse \texttt{.ll} files and also supports importing pre-computed data from JSON.
-
-\begin{itemize}
-    \item \textbf{\texttt{llvm\_events.py}:} Parses an LLVM module and emits a \texttt{ProgramEventStream}---a typed sequence of \texttt{IREvent} records. Each event carries the function name, block name, opcode, full instruction text, a classified \texttt{EventKind} (one of \texttt{alloca}, \texttt{load}, \texttt{store}, \texttt{binop}, \texttt{compare}, \texttt{call}, \texttt{ret}, \texttt{br}, or \texttt{other}), its index within the function, debug line number, and operand list. Typed CFG edges are extracted directly from \texttt{llvmlite} terminator operands (\texttt{br}, \texttt{switch}, \texttt{invoke}, \texttt{indirectbr}, \texttt{callbr}) with true/false labels on conditional branches.
-
-    \item \textbf{\texttt{cfg\_edge\_io.py}:} Serializes and deserializes \texttt{CFGEdge} lists to JSON, enabling round-trip import/export of control-flow edges via the \texttt{--import-cfg-edges} and \texttt{--export-cfg-edges} CLI flags.
-
-    \item \textbf{\texttt{analysis\_metadata\_io.py}:} Loads and saves dominator-tree and loop-analysis metadata as JSON (\texttt{--import-analysis-metadata} / \texttt{--export-analysis-metadata}).
-
-    \item \textbf{\texttt{trace\_io.py}:} Reads and writes runtime path traces as JSON (\texttt{--import-trace} / \texttt{--export-trace}), used for overlay visualization in CFG traversal animations.
-
-    \item \textbf{\texttt{dot\_layout.py}:} Parses a Graphviz DOT file produced by \texttt{opt -passes=dot-cfg} and computes a \texttt{DotLayout} with node positions and edge routes for the CFG animation scene.
-
-    \item \textbf{\texttt{display\_lines.py}:} Cleans raw IR text into per-function line lists used by the rich animation panels.
-\end{itemize}
-
-\subsubsection{Transformation Layer}
-The Transformation layer converts the ingest output into an intermediate scene graph and execution traces suitable for rendering.
-
-\begin{itemize}
-    \item \textbf{\texttt{models.py}:} Defines the core data model---\texttt{SceneGraph}, \texttt{SceneNode}, \texttt{SceneEdge}, \texttt{CFGBlock}, \texttt{TraceOverlay}, and \texttt{BlockMetadata}. Nodes carry a \texttt{role} assigned from edge topology: \texttt{entry}, \texttt{linear}, \texttt{branch}, \texttt{merge}, or \texttt{exit}.
-
-    \item \textbf{\texttt{scene.py}:} \texttt{build\_scene\_graph(stream, ...)} groups events by function and block, attaches typed CFG edges, assigns block roles, applies optional domtree/loop metadata, and attaches optional trace overlays. Output is a complete \texttt{SceneGraph}.
-
-    \item \textbf{\texttt{trace.py}:} \texttt{build\_execution\_trace(stream, include\_ssa=...)} produces a list of \texttt{TraceStep} or \texttt{RichTraceStep} records capturing the execution order with optional SSA result values for \texttt{binop}, \texttt{compare}, and \texttt{load} instructions.
-
-    \item \textbf{\texttt{commands.py}:} \texttt{build\_animation\_commands(stream)} generates a list of \texttt{AnimationCommand} records (\texttt{push\_frame}, \texttt{pop\_frame}, \texttt{highlight\_cell}, etc.) used by the basic animation mode.
-\end{itemize}
-
-\subsubsection{Presentation Layer}
-The Presentation layer renders the scene graph using Manim Community Edition\cite{manimce} and provides export functionality.
-
-\begin{itemize}
-    \item \textbf{User Interface:} The CLI accepts LLVM IR files and supports the following flags:
-    \begin{lstlisting}[language=bash,caption={Actual CLI usage},gobble=4]
+\subsubsection{CLI Entry Point}
+The \texttt{llvmanim.cli} module is the user-facing entry point. It accepts LLVM~IR files and orchestrates the three pipeline layers via \texttt{argparse}:
+\begin{lstlisting}[language=bash,caption={Actual CLI usage},gobble=4]
     # Export JSON scene graph + Graphviz DOT/PNG
     $ uv run llvmanim input.ll --json --draw \
         --outdir out/
@@ -56,22 +23,89 @@ The Presentation layer renders the scene graph using Manim Community Edition\cit
         --dot-cfg main.dot --import-trace trace.json \
         --outdir out/
     \end{lstlisting}
+When the tool encounters unsupported IR constructs, missing debug metadata, or malformed input, it emits a descriptive error message and continues processing the remainder of the program where possible.
 
-    When the tool encounters unsupported IR constructs, missing debug metadata, or malformed input, it emits a descriptive error message and continues processing the remainder of the program where possible.
+\subsubsection{Ingestion Layer}
+The Ingestion layer extracts program structure from LLVM IR. It uses the \texttt{llvmlite}\cite{llvmlite} Python binding to parse \texttt{.ll} files and also supports importing pre-computed data from JSON.
 
-    \item \textbf{Animation Modes:}
+\begin{itemize}
+    \item \textbf{\texttt{llvm\_events.py}:} Parses an LLVM module and emits a~\texttt{ProgramEventStream}---a typed sequence of~\texttt{IREvent} records. Each event carries the function name, block name, opcode, full instruction text, a~classified \texttt{EventKind} (one of~\texttt{alloca}, \texttt{load}, \texttt{store}, \texttt{binop}, \texttt{compare}, \texttt{call}, \texttt{ret}, \texttt{br}, or~\texttt{other}), its index within the function, debug line number, and operand list. Typed CFG edges are extracted directly from \texttt{llvmlite} terminator operands (\texttt{br}, \texttt{switch}, \texttt{invoke}, \texttt{indirectbr}, \texttt{callbr}) with true/false labels on conditional branches.
+
+    \item \textbf{\texttt{cfg\_edge\_io.py}:} Serializes and deserializes \texttt{CFGEdge} lists to~JSON, enabling round-trip import/export of control-flow edges via dedicated CLI flags.
+
+    \item \textbf{\texttt{analysis\_metadata\_io.py}:} Loads and saves dominator-tree and loop-analysis metadata as~JSON, supporting round-trip import and export via CLI flags.
+
+    \item \textbf{\texttt{trace\_io.py}:} Reads and writes runtime path traces as JSON (\texttt{--import-trace} / \texttt{--export-trace}), used for overlay visualization in CFG traversal animations.
+
+    \item \textbf{\texttt{dot\_layout.py}:} Parses a Graphviz DOT file produced by \texttt{opt -passes=dot-cfg} and computes a \texttt{DotLayout} with node positions and edge routes for the CFG animation scene.
+
+    \item \textbf{\texttt{display\_lines.py}:} Cleans raw IR text into per-function line lists used by the rich animation panels.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{dot_layout_model}}
+\caption{DOT Layout model. \texttt{DotLayout} stores bounding-box coordinates, per-node positions, and edge spline points parsed from Graphviz output.}
+\label{fig:dot_layout_model}
+\end{figure}
+
+\noindent Fig.~\ref{fig:pipeline} traces the complete data flow from input files through each of these ingest components to the downstream Transform and Render stages.
+
+\begin{figure*}[!htbp]
+\centerline{\includegraphics[width=\textwidth]{pipeline}}
+\caption{End-to-end data pipeline showing how input files flow through the Ingest, Transform, and Render stages to produce output artifacts.}
+\label{fig:pipeline}
+\end{figure*}
+
+\subsubsection{Transformation Layer}
+The Transformation layer converts the ingest output into an intermediate scene graph and execution traces suitable for rendering. Fig.~\ref{fig:data_model_core} details the core data model types; Fig.~\ref{fig:scene_graph_model} shows the derived Scene Graph structure consumed by the Render layer.
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=\linewidth]{data_model_core}}
+\caption{Core and Block data models. \texttt{ProgramEventStream} aggregates typed \texttt{IREvent} records and \texttt{CFGEdge} lists produced by the Ingestion layer. \texttt{CFGBlock} groups events by basic block with role and~dominator metadata.}
+\label{fig:data_model_core}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{\texttt{models.py}:} Defines the core data model---\texttt{SceneGraph}, \texttt{SceneNode}, \texttt{SceneEdge}, \texttt{CFGBlock}, \texttt{TraceOverlay}, and~\texttt{BlockMetadata}. Nodes carry a~\texttt{role} assigned from edge topology: \texttt{entry}, \texttt{linear}, \texttt{branch}, \texttt{merge}, or~\texttt{exit}.
+
+    \item \textbf{\texttt{scene.py}:} The \texttt{build\_scene\_graph} function groups events by function and block, attaches typed CFG edges, assigns block roles, applies optional domtree/loop metadata, and attaches optional trace overlays. Output is a~complete \texttt{SceneGraph}.
+
+    \item \textbf{\texttt{trace.py}:} The \texttt{build\_execution\_trace} function produces a~list of \texttt{TraceStep} or~\texttt{RichTraceStep} records capturing the execution order with optional SSA result values for \texttt{binop}, \texttt{compare}, and~\texttt{load} instructions.
+
+    \item \textbf{\texttt{commands.py}:} The \texttt{build\_animation\_commands} function generates a~list of~\texttt{AnimationCommand} records (\texttt{push\_frame}, \texttt{pop\_frame}, \texttt{highlight\_cell}, etc.) used by the basic animation mode.
+\end{itemize}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=\linewidth]{scene_graph_model}}
+\caption{Scene Graph model (\texttt{transform.models}). \texttt{SceneGraph} wraps the block graph and carries optional \texttt{TraceOverlay} data for CFG traversal animations.}
+\label{fig:scene_graph_model}
+\end{figure}
+
+\subsubsection{Render Layer}
+The Render layer renders the scene graph using Manim Community Edition\cite{manimce} and provides export functionality. The Animation model (Fig.~\ref{fig:animation_model}) details the \texttt{AnimationCommand} and \texttt{RenderStep} types that drive rendering.
+
+\begin{itemize}
+    \item \textbf{Animation Modes:} The tool supports three rendering modes, each adding progressively more detail. The animation commands and render steps that drive these modes are captured in the Animation model (Fig.~\ref{fig:animation_model}).
     \begin{itemize}
         \item \texttt{--ir-mode basic}: Stack-only view with per-cell badge flash for each instruction.
         \item \texttt{--ir-mode rich}: Two-column layout with an IR source panel and a moving spotlight cursor alongside the stack view.
         \item \texttt{--ir-mode rich-ssa}: Three-column layout (IR Source $\mid$ SSA Values $\mid$ Stack) showing computed results for binary operations, comparisons, and loads.
     \end{itemize}
+\end{itemize}
 
+\begin{figure}[H]
+\centerline{\includegraphics[width=\linewidth]{animation_model}}
+\caption{Animation model. \texttt{AnimationCommand} and~\texttt{RenderStep} records drive the three rendering modes; \texttt{ActionKind} enumerates the~supported animation primitives.}
+\label{fig:animation_model}
+\end{figure}
+
+\begin{itemize}
     \item \textbf{CFG Traversal:} \texttt{--cfg-animate} renders an animated walk through the control-flow graph using DOT-derived node positions (\texttt{--dot-cfg}) and a runtime trace (\texttt{--import-trace}).
 
-    \item \textbf{Export:}
+    \item \textbf{Export:} Static artifacts complement the animated output. The DOT Layout model (Fig.~\ref{fig:dot_layout_model}) captures the node positions and edge routes parsed from Graphviz output.
     \begin{itemize}
-        \item \texttt{--json}: Writes a machine-readable \texttt{scene\_graph.json}.
-        \item \texttt{--draw}: Writes \texttt{cfg\_main.dot} and, when Graphviz binaries are available, \texttt{cfg\_main.png}.
+        \item \texttt{--json}: Writes a~machine-readable \texttt{scene\_graph.json} file.
+        \item \texttt{--draw}: Writes \texttt{cfg\_main.dot} and, when Graphviz is available, a~rendered \texttt{cfg\_main.png}.
     \end{itemize}
 
     \item \textbf{Rendering:} Manim CE renders MP4 or GIF output. GIF conversion uses an \texttt{ffmpeg} palette workflow to reduce peak memory usage. The \texttt{--preview} flag opens the rendered animation in a viewer.

@@ -44,35 +44,62 @@ LLVManim classifies each LLVM IR instruction into one of nine \texttt{EventKind}
     \item \texttt{alloca}: Stack memory allocation
     \item \texttt{load} / \texttt{store}: Memory read and write operations
     \item \texttt{binop}: Binary arithmetic operations (\texttt{add}, \texttt{sub}, \texttt{mul}, etc.)
-    \item \texttt{compare}: Integer and floating-point comparisons (\texttt{icmp}, \texttt{fcmp})
+    \item \texttt{compare}: Integer and floating-point comparisons (\texttt{icmp},~\texttt{fcmp})
     \item \texttt{call}: Function invocations
     \item \texttt{ret}: Function returns
     \item \texttt{br}: Branch instructions (conditional and unconditional)
-    \item \texttt{other}: Unsupported or unrecognized instructions (skipped with a diagnostic message)
+    \item \texttt{other}: Unsupported or unrecognized instructions (skipped with a~diagnostic message)
 \end{itemize}
 
 CFG edge extraction supports five terminator types: \texttt{br}, \texttt{switch}, \texttt{invoke}, \texttt{indirectbr}, and \texttt{callbr}. Conditional branches are labeled with T/F direction annotations.
 
 \subsection{Animation Modes}
-LLVManim provides three stack-focused animation modes and one graph-based mode. Each mode can be reproduced with a single CLI command.
+LLVManim provides three stack-focused animation modes and one graph-based mode, each reproducible with a single CLI command. Fig.~\ref{fig:animation_modes} shows representative frames from all three stack modes.
 
-\textbf{Basic mode} (\texttt{--ir-mode basic}) renders a stack-only view where each instruction triggers a per-cell badge flash:
+\textbf{Basic mode} (\texttt{--ir-mode basic}) renders a minimal stack-only view. Each IR instruction triggers a per-cell badge flash on the corresponding stack slot, providing a clean visual pulse of execution without additional clutter. This mode is best suited for audiences who need only a high-level sense of execution flow, such as introductory lectures or quick demonstrations, since it strips away all source-level detail and focuses purely on the call stack.
 \begin{lstlisting}[language=bash,gobble=0]
 uv run llvmanim input.ll --animate \
     --ir-mode basic --outdir out/
 \end{lstlisting}
 
-\textbf{Rich mode} (\texttt{--ir-mode rich}) adds a two-column layout with an IR source panel and a moving spotlight cursor highlighting the currently executing instruction:
+\textbf{Rich mode} (\texttt{--ir-mode rich}) extends the basic view with a two-column layout. An IR source panel on the left displays the current function's instructions while a spotlight cursor tracks the executing line, giving the audience both the ``what'' (the stack) and the ``where'' (the source). This mode is particularly valuable when the presenter wants to walk through specific IR constructs---for example, showing how a series of \texttt{alloca} and \texttt{store} instructions initialize local variables before a loop body executes. The spotlight cursor provides a natural focal point that guides the viewer's attention through the code.
 \begin{lstlisting}[language=bash,gobble=0]
 uv run llvmanim input.ll --animate \
     --ir-mode rich --outdir out/
 \end{lstlisting}
 
-\textbf{Rich-SSA mode} (\texttt{--ir-mode rich-ssa}) extends the rich layout to three columns (IR Source $\mid$ SSA Values $\mid$ Stack), displaying computed symbolic values for binary operations, comparisons, and loads:
+\textbf{Rich-SSA mode} (\texttt{--ir-mode rich-ssa}) takes the rich layout a step further with a dedicated third column for SSA values (IR Source $\mid$ SSA Values $\mid$ Stack). The center panel displays the symbolic result of each binary operation, comparison, or load as it executes, making it possible to follow data dependencies without mentally resolving \texttt{\%}-names. This is the most detailed mode and targets audiences already familiar with SSA form---for instance, a compiler course where students need to see how \texttt{\%4 = icmp slt i32 \%2, \%3} evaluates during a loop iteration.
 \begin{lstlisting}[language=bash,gobble=0]
 uv run llvmanim input.ll --animate \
     --ir-mode rich-ssa --outdir out/
 \end{lstlisting}
+
+\begin{figure*}[!htbp]
+\centering
+\begin{subfigure}[t]{0.49\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{rich_mode_frame}
+  \caption{Rich mode: two-column layout with IR source spotlight alongside the stack.}
+  \label{fig:rich_mode}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{rich_ssa_mode_frame}
+  \caption{Rich-SSA mode: three-column layout showing computed SSA values for \texttt{load} and \texttt{icmp} instructions.}
+  \label{fig:rich_ssa_mode}
+\end{subfigure}
+
+\vspace{0.5em}
+
+\begin{subfigure}[t]{0.70\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{basic_mode_frame}
+  \caption{Basic mode: stack-only view with per-cell badge flash during a \texttt{call} to \texttt{@init}.}
+  \label{fig:basic_mode}
+\end{subfigure}
+\caption{The three stack-focused animation modes, shown with cropped frames from actual LLVManim output.}
+\label{fig:animation_modes}
+\end{figure*}
 
 \textbf{CFG traversal} (\texttt{--cfg-animate}) renders an animated walk through the control-flow graph, using Graphviz DOT layout for node positions and a runtime trace for the traversal order:
 \begin{lstlisting}[language=bash,gobble=0]
@@ -80,13 +107,6 @@ uv run llvmanim input.ll --cfg-animate \
     --dot-cfg main.dot \
     --import-trace trace.json --outdir out/
 \end{lstlisting}
-
-% Placeholder: add screenshots of each mode here when available.
-% \begin{figure*}[htbp]
-% \centerline{\includegraphics[width=\textwidth]{basic_mode.png}}
-% \caption{Basic mode animation showing stack operations for \texttt{double.ll}.}
-% \label{fig:basic_mode}
-% \end{figure*}
 
 \subsection{Test Coverage and Quality}
 The LLVManim implementation is validated by 302 automated tests organized into four marker categories:

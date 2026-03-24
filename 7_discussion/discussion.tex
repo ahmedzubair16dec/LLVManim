@@ -3,7 +3,7 @@
 \subsection{Architectural Decisions}
 Several architectural decisions shaped the final system:
 
-\textbf{Three-layer separation with import-linter.} Enforcing strict layer boundaries at build time prevented coupling between Ingestion, Transformation, and Presentation. This paid dividends during the IR display model refactor, where the Transformation layer's data structures were restructured without touching any Presentation code. The \texttt{import-linter} tool caught accidental cross-layer imports on multiple occasions during development.
+\textbf{Three-layer separation with import-linter.} Enforcing strict layer boundaries at build time prevented coupling between Ingestion, Transformation, and Rendering. This paid dividends during the IR display model refactor, where the Transformation layer's data structures were restructured without touching any Rendering layer code. The \texttt{import-linter} tool caught accidental cross-layer imports on multiple occasions during development.
 
 \textbf{Display model abstraction.} Rather than having Manim scenes query the scene graph directly, we introduced an explicit display model (the \texttt{TraceStep}/\texttt{RichTraceStep} and \texttt{AnimationCommand} types) that decouples rendering from data extraction. This made it straightforward to add the rich-SSA animation mode by extending the trace step type without modifying existing scene classes.
 
@@ -26,7 +26,7 @@ The following proposed features were not implemented:
 
 Conversely, two capabilities were implemented that were \textit{not} in the original proposal:
 \begin{itemize}
-    \item \textbf{Rich-SSA three-column animation:} The \texttt{--ir-mode rich-ssa} mode displays symbolic SSA values alongside IR source and stack state, providing deeper instruction-level insight than originally planned.
+    \item \textbf{Rich-SSA three-column animation:} The \texttt{--ir-mode rich-ssa} mode displays symbolic SSA values alongside IR source and stack state, providing deeper instruction-level insight than originally~planned.
     \item \textbf{CFG traversal animation:} The \texttt{--cfg-animate} mode renders an animated walk through the control-flow graph using Graphviz DOT layout, a feature that emerged from explorations in the sandbox environment.
 \end{itemize}
 
@@ -49,7 +49,7 @@ The current implementation has several known limitations:
 
     \item \textbf{Architectural enforcement catches violations early.} \texttt{import-linter} rejected several pull requests that would have introduced cross-layer dependencies, preventing technical debt before it accumulated.
 
-    \item \textbf{Sandbox-driven exploration.} Experimental Manim scripts in the \texttt{sandbox/} directory allowed rapid prototyping of animation ideas (CFG traversal, register panels) without risking the main codebase.
+    \item \textbf{Sandbox-driven exploration.} Experimental Manim scripts in the~\texttt{sandbox/} directory allowed rapid prototyping of animation ideas (CFG traversal, register panels) without risking the main~codebase.
 
     \item \textbf{Typed CFG edges via llvmlite.} Moving from regex-based IR text parsing to \texttt{llvmlite}'s terminator API eliminated an entire class of parsing bugs and made the Ingestion layer robust against IR formatting variations.
 \end{itemize}

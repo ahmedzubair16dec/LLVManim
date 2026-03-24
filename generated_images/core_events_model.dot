@@ -1,0 +1,27 @@
+digraph core_events_model {
+    rankdir=TB;
+    fontname="Helvetica";
+    node [fontname="Courier", fontsize=13, shape=record, style="filled"];
+    edge [fontname="Helvetica", fontsize=11];
+    bgcolor="white";
+    ranksep=0.3;
+    nodesep=0.25;
+    label="Core Event Model  (llvmanim.transform.models)";
+    labelloc=t; fontsize=16; fontcolor="#e65100"; fontname="Helvetica";
+
+    ProgramEventStream [label="{ProgramEventStream|source_path : str\l| events : list[IREvent]\l| cfg_edges : list[CFGEdge]\l| display_lines : dict[str, list[str]]\l}",
+                        fillcolor="#ffcc80", color="#ef6c00"];
+
+    IREvent [label="{IREvent|function_name : str\l| block_name : str\l| opcode : str\l| text : str\l| kind : EventKind\l| index_in_function : int\l| debug_line : int | None\l| operands : list[str]\l}",
+             fillcolor="#ffe0b2", color="#ef6c00"];
+
+    EventKind [label="{EventKind\n(Literal type)|alloca | load | store\l| binop | compare | call\l| ret | br | other\l}",
+               fillcolor="#ffe0b2", color="#ef6c00"];
+
+    CFGEdge [label="{CFGEdge|source : str\l| target : str\l| kind : str\l| label : str\l}",
+             fillcolor="#ffe0b2", color="#ef6c00"];
+
+    ProgramEventStream -> IREvent   [label="  events *", color="#ef6c00"];
+    ProgramEventStream -> CFGEdge   [label="  cfg_edges *", color="#ef6c00"];
+    IREvent            -> EventKind [label="  kind", style=dashed, color="#ffa726"];
+}
