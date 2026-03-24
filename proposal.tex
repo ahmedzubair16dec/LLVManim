@@ -14,11 +14,21 @@
 \usepackage{colortbl}
 \usepackage{etoolbox}
 \usepackage{listings}
+\usepackage{silence}
+\WarningFilter{caption}{Unknown document class}
+\usepackage[font=footnotesize,compatibility=false]{caption}
+\usepackage{subcaption}
+\usepackage{afterpage}
+\usepackage{float}
 \usepackage{LLVManim}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-\graphicspath{ {./images/} }
+\graphicspath{ {./images/} {./generated_images/} }
+\raggedbottom
+\emergencystretch=2em
+\hbadness=10000
+\hfuzz=2pt
 
 \begin{document}
 
@@ -54,7 +64,7 @@ ahmedzubair16dec@gmail.com}
 \maketitle
 
 \begin{abstract}
-LLVManim is a code visualization tool that generates aesthetically pleasing animations of control flow and memory operations from LLVM IR. Over the course of a single semester, we designed and implemented a three-layer pipeline---Ingestion, Transformation, and Presentation---that parses \texttt{.ll} files with \texttt{llvmlite}, derives a typed intermediate scene graph, and renders animations through Manim Community Edition. The finished tool supports three animation modes (basic stack view, rich IR spotlight, and a three-column SSA panel), a CFG traversal animation driven by Graphviz layout, and machine-readable JSON and DOT export. The implementation comprises 26 Python modules validated by 302 automated tests at 84\% line coverage, enforced by a four-stage quality gate (Ruff, Pyright, import-linter, pytest). LLVManim demonstrates that presentation-quality program visualization can be made accessible through a simple command-line interface, eliminating the need for manual Manim scripting or post-processing of LLVM's utilitarian graph output.
+LLVManim is a code visualization tool that generates aesthetically pleasing animations of control flow and memory operations from LLVM IR. Over the course of a single semester, we designed and implemented a three-layer pipeline---Ingestion, Transformation, and Rendering---that parses \texttt{.ll} files with \texttt{llvmlite}, derives a typed intermediate scene graph, and renders animations through Manim Community Edition. The finished tool supports three animation modes (basic stack view, rich IR spotlight, and a three-column SSA panel), a CFG traversal animation driven by Graphviz layout, and machine-readable JSON and DOT export. The implementation comprises 26 Python modules validated by 302 automated tests at 84\% line coverage, enforced by a four-stage quality gate (Ruff, Pyright, import-linter, pytest). LLVManim demonstrates that presentation-quality program visualization can be made accessible through a simple command-line interface, eliminating the need for manual Manim scripting or post-processing of LLVM's utilitarian graph output.
 \end{abstract}
 
 \begin{IEEEconcepts}
@@ -82,7 +92,7 @@ We would like to thank Dr. James Daly for his guidance, feedback, and support th
 \bibliography{references}
 
 \newpage
-\appendix
+\appendices
 \section{Projected Timeline}\label{app:timeline}
 \input{timeline}
 

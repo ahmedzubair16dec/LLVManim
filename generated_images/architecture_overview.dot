@@ -1,0 +1,34 @@
+digraph architecture_overview {
+    rankdir=TB;
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=14, style="filled,rounded", shape=box,
+          height=0.7];
+    edge [fontname="Helvetica", fontsize=11, color="#546e7a"];
+    bgcolor="white";
+    ranksep=0.7;
+    nodesep=0.5;
+
+    inputs [label="Input Files\n.ll (LLVM IR)  ·  .json (execution trace)  ·  .dot (CFG layout)",
+            shape=note, fillcolor="#fff9c4", color="#f9a825"];
+
+    cli [label="CLI  (llvmanim.cli)\nargparse entry point",
+         fillcolor="#c5cae9", color="#3949ab"];
+
+    ingest [label="Ingestion Layer  (llvmanim.ingest)\nParse IR  ·  Load traces & edges  ·  Compute DOT layout",
+            fillcolor="#c8e6c9", color="#2e7d32"];
+
+    transform [label="Transformation Layer  (llvmanim.transform)\nBuild scene graph  ·  Generate animation commands  ·  Merge trace overlay",
+               fillcolor="#ffe0b2", color="#ef6c00"];
+
+    render [label="Rendering Layer  (llvmanim.render)\nManim CE animation  ·  DOT / PNG export  ·  JSON export",
+             fillcolor="#bbdefb", color="#1565c0"];
+
+    outputs [label="Output Artifacts\nMP4 / GIF animation  ·  PNG / DOT diagram  ·  JSON scene graph",
+             shape=note, fillcolor="#ffcdd2", color="#c62828"];
+
+    cli -> inputs [style=dashed, label="reads"];
+    inputs -> ingest [label="parse"];
+    ingest -> transform [label="ProgramEventStream · CFGEdge[]\nTraceOverlay · BlockMetadata · DotLayout"];
+    transform -> render [label="SceneGraph · AnimationCommand[]"];
+    render -> outputs [label="render / export"];
+}

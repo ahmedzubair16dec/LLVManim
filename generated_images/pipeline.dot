@@ -1,11 +1,11 @@
 digraph pipeline {
     rankdir=LR;
     fontname="Helvetica";
-    node [fontname="Helvetica", fontsize=11, style="filled,rounded", shape=box];
-    edge [fontname="Helvetica", fontsize=9, color="#546e7a"];
+    node [fontname="Helvetica", fontsize=14, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=10, color="#546e7a"];
     bgcolor="white";
-    nodesep=0.6;
-    ranksep=1.0;
+    nodesep=0.3;
+    ranksep=0.6;
 
     /* ── Input ───────────────────────────────── */
     subgraph cluster_input {
@@ -17,78 +17,93 @@ digraph pipeline {
 
     /* ── CLI ─────────────────────────────────── */
     cli [label="llvmanim CLI\n(argparse)", fillcolor="#c5cae9", color="#3949ab",
-         shape=box, width=1.6];
+         shape=box];
 
     /* ── Ingest ──────────────────────────────── */
     subgraph cluster_ingest {
         label="INGEST"; labelloc=b;
         style="filled,rounded"; fillcolor="#e8f5e9"; color="#43a047";
-        fontsize=12; fontcolor="#1b5e20";
+        fontsize=13; fontcolor="#1b5e20"; margin=6;
 
-        parse [label="parse_module_to_events\n(llvmlite)", fillcolor="#c8e6c9", color="#2e7d32"];
+        /* Ordered top→bottom to minimize crossings:
+           parse connects to both transform nodes (top position);
+           load_meta/edges/trace connect to scene_build;
+           load_dot connects to cfg_scene in Present (bottom position). */
+        parse      [label="parse_module_to_events\n(llvmlite)", fillcolor="#c8e6c9", color="#2e7d32"];
+        load_meta  [label="load_analysis_metadata", fillcolor="#c8e6c9", color="#2e7d32"];
         load_edges [label="load_cfg_edges", fillcolor="#c8e6c9", color="#2e7d32"];
         load_trace [label="load_trace", fillcolor="#c8e6c9", color="#2e7d32"];
         load_dot   [label="compute_dot_layout", fillcolor="#c8e6c9", color="#2e7d32"];
-        load_meta  [label="load_analysis_metadata", fillcolor="#c8e6c9", color="#2e7d32"];
     }
 
     /* ── Transform ───────────────────────────── */
     subgraph cluster_transform {
         label="TRANSFORM"; labelloc=b;
         style="filled,rounded"; fillcolor="#fff3e0"; color="#fb8c00";
-        fontsize=12; fontcolor="#e65100";
+        fontsize=13; fontcolor="#e65100"; margin=6;
 
-        scene_build [label="build_scene_graph\n(blocks ➜ SceneGraph)", fillcolor="#ffe0b2", color="#ef6c00"];
+        /* cmd_build on top aligns with parse; scene_build below
+           aligns with the load_* nodes that feed into it. */
         cmd_build   [label="build_animation_commands\n(stream ➜ AnimationCommand[])", fillcolor="#ffe0b2", color="#ef6c00"];
+        scene_build [label="build_scene_graph\n(blocks ➜ SceneGraph)", fillcolor="#ffe0b2", color="#ef6c00"];
     }
 
     /* ── Present ─────────────────────────────── */
     subgraph cluster_present {
-        label="PRESENT"; labelloc=b;
+        label="RENDER"; labelloc=b;
         style="filled,rounded"; fillcolor="#e3f2fd"; color="#1e88e5";
-        fontsize=12; fontcolor="#0d47a1";
+        fontsize=13; fontcolor="#0d47a1"; margin=6;
 
+        /* Ordered to match incoming edges from Transform:
+           stack_scene from cmd_build (top);
+           export nodes from scene_build;
+           cfg_scene at bottom near load_dot cross-edge. */
+        stack_scene [label="RichStackScene\n(Manim CE)", fillcolor="#bbdefb", color="#1565c0"];
         export_dot  [label="export_cfg_dot\nexport_cfg_png", fillcolor="#bbdefb", color="#1565c0"];
         export_json [label="export_scene_graph_json", fillcolor="#bbdefb", color="#1565c0"];
-        stack_scene [label="RichStackScene\n(Manim CE)", fillcolor="#bbdefb", color="#1565c0"];
         cfg_scene   [label="CFGAnimationScene\n(Manim CE)", fillcolor="#bbdefb", color="#1565c0"];
     }
 
     /* ── Output ──────────────────────────────── */
     subgraph cluster_output {
         label=""; style=invis;
+        out_mp4a [label=".mp4 / .gif\nstack animation", shape=note, fillcolor="#ffcdd2", color="#c62828"];
         out_dot  [label=".dot / .png\nCFG diagram", shape=note, fillcolor="#ffcdd2", color="#c62828"];
         out_json [label=".json\nscene graph", shape=note, fillcolor="#ffcdd2", color="#c62828"];
-        out_mp4a [label=".mp4 / .gif\nstack animation", shape=note, fillcolor="#ffcdd2", color="#c62828"];
         out_mp4b [label=".mp4 / .gif\nCFG traversal", shape=note, fillcolor="#ffcdd2", color="#c62828"];
     }
 
-    /* ── Flow ────────────────────────────────── */
+    /* ── Flow: Input → CLI ───────────────────── */
     ll_file -> cli;
     dot_cfg -> cli [style=dashed];
     trace   -> cli [style=dashed];
 
-    cli -> parse      [label="IR text"];
+    /* ── Flow: CLI → Ingest ──────────────────── */
+    cli -> parse      [label="IR text", weight=3];
+    cli -> load_meta  [style=dashed];
     cli -> load_edges [style=dashed];
     cli -> load_trace [style=dashed];
     cli -> load_dot   [style=dashed];
-    cli -> load_meta  [style=dashed];
 
-    parse      -> scene_build [label="ProgramEventStream"];
-    parse      -> cmd_build   [label="ProgramEventStream"];
-    load_edges -> scene_build [label="CFGEdge[]", style=dashed];
-    load_trace -> scene_build [label="TraceOverlay", style=dashed];
-    load_meta  -> scene_build [label="BlockMetadata", style=dashed];
+    /* ── Flow: Ingest → Transform ────────────── */
+    parse      -> cmd_build   [label="ProgramEventStream", weight=3];
+    parse      -> scene_build [label="ProgramEventStream", weight=2];
+    load_meta  -> scene_build [label="BlockMetadata", style=dashed, weight=2];
+    load_edges -> scene_build [label="CFGEdge[]", style=dashed, weight=2];
+    load_trace -> scene_build [label="TraceOverlay", style=dashed, weight=2];
 
-    scene_build -> export_dot  [label="SceneGraph"];
-    scene_build -> export_json [label="SceneGraph"];
-    scene_build -> cfg_scene   [label="SceneGraph"];
-    load_dot    -> cfg_scene   [label="DotLayout", style=dashed];
+    /* ── Flow: Transform → Present ───────────── */
+    cmd_build   -> stack_scene [label="AnimationCommand[]", weight=3];
+    scene_build -> export_dot  [label="SceneGraph", weight=2];
+    scene_build -> export_json [label="SceneGraph", weight=2];
+    scene_build -> cfg_scene   [label="SceneGraph", weight=2];
 
-    cmd_build   -> stack_scene [label="AnimationCommand[]"];
+    /* ── Cross-column: Ingest → Present ──────── */
+    load_dot -> cfg_scene [label="DotLayout", style=dashed];
 
+    /* ── Flow: Present → Output ──────────────── */
+    stack_scene -> out_mp4a;
     export_dot  -> out_dot;
     export_json -> out_json;
-    stack_scene -> out_mp4a;
     cfg_scene   -> out_mp4b;
 }

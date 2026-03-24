@@ -1,0 +1,89 @@
+digraph data_model_derived {
+    rankdir=TB;
+    fontname="Helvetica";
+    node [fontname="Courier", fontsize=13, shape=record, style="filled"];
+    edge [fontname="Helvetica", fontsize=11];
+    bgcolor="white";
+    ranksep=0.7;
+    nodesep=0.5;
+    label="Scene Graph, Animation & Layout Models";
+    labelloc=t; fontsize=16; fontcolor="#1a237e"; fontname="Helvetica";
+
+    /* ── External references (from core model) ── */
+    CFGBlock [label="{CFGBlock|(...see core model)}", fillcolor="#f5f5f5", color="#bdbdbd",
+              fontcolor="#757575"];
+    CFGEdge  [label="{CFGEdge|(...see core model)}", fillcolor="#f5f5f5", color="#bdbdbd",
+              fontcolor="#757575"];
+    IREvent  [label="{IREvent|(...see core model)}", fillcolor="#f5f5f5", color="#bdbdbd",
+              fontcolor="#757575"];
+
+    /* ── Scene Graph Model ───────────────────── */
+    subgraph cluster_scene {
+        label="Scene Graph Model  (transform.models)";
+        style="filled,rounded"; fillcolor="#e3f2fd"; color="#1e88e5";
+        fontname="Helvetica"; fontsize=14; fontcolor="#0d47a1";
+        margin=16;
+
+        SceneGraph [label="{SceneGraph|nodes : list[SceneNode]\l| edges : list[CFGEdge]\l| overlay : TraceOverlay | None\l}",
+                    fillcolor="#90caf9", color="#1565c0"];
+
+        SceneNode [label="{SceneNode|id : str\l| label : str\l| role : BlockRole\l| block : CFGBlock\l| animation_hint : str\l}",
+                   fillcolor="#bbdefb", color="#1565c0"];
+
+        TraceOverlay [label="{TraceOverlay|visited_nodes : list[str]\l| traversed_edges : list[tuple]\l| entry_order : list[str]\l| termination_reason : str\l}",
+                      fillcolor="#bbdefb", color="#1565c0"];
+    }
+
+    /* ── Animation Model ─────────────────────── */
+    subgraph cluster_anim {
+        label="Animation Model  (transform.commands / present)";
+        style="filled,rounded"; fillcolor="#fce4ec"; color="#e53935";
+        fontname="Helvetica"; fontsize=14; fontcolor="#b71c1c";
+        margin=16;
+
+        LLVManimScene [label="{LLVManimScene|steps : list[RenderStep]\l}",
+                       fillcolor="#ef9a9a", color="#c62828"];
+
+        AnimationCommand [label="{AnimationCommand|action : ActionKind\l| event : IREvent\l}",
+                          fillcolor="#ffcdd2", color="#c62828"];
+
+        ActionKind [label="{ActionKind\n(Literal type)|create_stack_slot\l| animate_memory_read\l| animate_memory_write\l| animate_binop\l| animate_compare\l| push_stack_frame\l| pop_stack_frame\l| highlight_branch\l| signal_stack_underflow\l}",
+                    fillcolor="#ffcdd2", color="#c62828"];
+
+        RenderStep [label="{RenderStep|label : str\l| action : ActionKind\l| slot_name : str | None\l| value : str | None\l| frame_label : str | None\l| text : str\l}",
+                    fillcolor="#ffcdd2", color="#c62828"];
+    }
+
+    /* ── DOT Layout Model ────────────────────── */
+    subgraph cluster_layout {
+        label="DOT Layout Model  (ingest.dot_layout)";
+        style="filled,rounded"; fillcolor="#f3e5f5"; color="#8e24aa";
+        fontname="Helvetica"; fontsize=14; fontcolor="#4a148c";
+        margin=16;
+
+        DotLayout [label="{DotLayout|bounding_box : tuple\l| nodes : dict[str, DotNodeLayout]\l| edges : list[DotEdgeLayout]\l}",
+                   fillcolor="#e1bee7", color="#7b1fa2"];
+
+        DotNodeLayout [label="{DotNodeLayout|name : str\l| x, y : float\l| width, height : float\l}",
+                       fillcolor="#e1bee7", color="#7b1fa2"];
+
+        DotEdgeLayout [label="{DotEdgeLayout|source, target : str\l| points : list[tuple]\l| label : str\l}",
+                       fillcolor="#e1bee7", color="#7b1fa2"];
+    }
+
+    /* ── Scene Graph relationships ────────────── */
+    SceneGraph -> SceneNode    [label="  nodes *", color="#1565c0"];
+    SceneGraph -> CFGEdge      [label="  edges *", color="#1565c0"];
+    SceneGraph -> TraceOverlay [label="  overlay 0..1", style=dashed, color="#42a5f5"];
+    SceneNode  -> CFGBlock     [label="  block", color="#1565c0"];
+
+    /* ── Animation relationships ──────────────── */
+    LLVManimScene    -> RenderStep  [label="  steps *", color="#e53935"];
+    AnimationCommand -> ActionKind  [label="  action", style=dashed, color="#e53935"];
+    AnimationCommand -> IREvent     [label="  event", color="#e53935"];
+    RenderStep       -> ActionKind  [label="  action", style=dashed, color="#e53935"];
+
+    /* ── Layout relationships ─────────────────── */
+    DotLayout -> DotNodeLayout [label="  nodes *", color="#7b1fa2"];
+    DotLayout -> DotEdgeLayout [label="  edges *", color="#7b1fa2"];
+}

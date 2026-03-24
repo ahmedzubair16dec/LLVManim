@@ -1,5 +1,5 @@
 \section{Conclusion}
-We presented LLVManim, a tool that automatically generates presentation-quality animations from LLVM IR. The system's three-layer pipeline---Ingestion, Transformation, and Presentation---cleanly separates concerns and is enforced by architectural boundary checks at build time. Over a single semester, we delivered a fully functional CLI tool with three animation modes, a CFG traversal visualizer, machine-readable export formats, and a comprehensive test suite of 302 tests at 84\% line coverage.
+We presented LLVManim, a tool that automatically generates presentation-quality animations from LLVM IR. The system's three-layer pipeline---Ingestion, Transformation, and Rendering---cleanly separates concerns and is enforced by architectural boundary checks at build time. Over a single semester, we delivered a fully functional CLI tool with three animation modes, a CFG traversal visualizer, machine-readable export formats, and a comprehensive test suite of 302 tests at 84\% line coverage.
 
 LLVManim demonstrates that the gap between LLVM's powerful but utilitarian analysis output and the polished animations achievable with Manim can be bridged through thoughtful automation. By targeting LLVM IR as input, the tool inherits support for any language that compiles through the LLVM toolchain, making it broadly applicable to educational and presentational contexts.
 
@@ -8,7 +8,7 @@ Several directions remain for future development:
 \begin{itemize}
     \item \textbf{Numeric SSA values:} Plumbing concrete runtime values through the trace overlay to replace symbolic operand names in the rich-SSA panel.
     \item \textbf{Heap visualization:} Extending the animation modes to render heap allocations, pointer dereferences, and linked data structures.
-    \item \textbf{Double-pop fix:} Resolving the known bug in consecutive-return control flow patterns.
-    \item \textbf{Automatic compilation:} Optionally invoking \texttt{clang} to compile C/C++ source files to \texttt{.ll} before processing.
-    \item \textbf{Interactive playback:} Exploring Manim's OpenGL preview mode or alternative rendering backends for pause/step interactivity.
+    \item \textbf{Double-pop fix:} Resolving the known bug in consecutive-return control-flow patterns.
+    \item \textbf{Automatic compilation:} Optionally invoking \texttt{clang} to compile C/C++ source files to~\texttt{.ll} before processing.
+    \item \textbf{Interactive playback:} Exploring Manim's OpenGL preview mode or alternative rendering backends for pause/step~interactivity.
 \end{itemize}
