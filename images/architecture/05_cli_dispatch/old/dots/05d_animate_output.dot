@@ -1,0 +1,39 @@
+// Extracted subgraph: --animate / --preview output from 05_cli_dispatch
+digraph animate_output {
+    graph [
+        fontname = "Helvetica" fontsize = 13
+        label    = "--animate / --preview Output Path"
+        labelloc = "t" splines = ortho nodesep = 0.55 ranksep = 0.9
+        pad = 0.4 bgcolor = "white"
+    ]
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=10 color="#555555" arrowsize=0.85]
+
+    // ── External stub ──────────────────────────────────────────────
+    sg [label="SceneGraph\n← Shared pipeline" fillcolor="#f5cba7" fontcolor="#ca6f1e"]
+
+    // ── Internal ───────────────────────────────────────────────────
+    subgraph cluster_animate {
+
+        label = "--animate / --preview"
+        style = filled fillcolor = "#eaf2ff" color = "#2980b9"
+        penwidth = 1.5 fontname = "Helvetica" fontsize = 11
+
+        ir_mode   [label="ir_mode\nbasic | rich | rich-ssa"
+                   fillcolor="#c0397e" fontcolor="white"]
+        build_ss  [label="build_scene_graph(mode=\"stack\")\ntransform/scene.py"
+                   fillcolor="#e67e22" fontcolor="white"]
+        srenderer [label="StackRenderer\nrender/stack_renderer.py"
+                   fillcolor="#2980b9" fontcolor="white"]
+        anim_out  [label="stack animation\nMP4 / GIF"
+                   fillcolor="#e74c3c" fontcolor="white" shape=note]
+
+        ir_mode  -> build_ss
+        build_ss -> srenderer
+        srenderer -> manim
+    }
+
+    manim   [label="Manim CE\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+    manim   -> anim_out
+    sg -> ir_mode [xlabel=" --animate\n--preview"]
+}

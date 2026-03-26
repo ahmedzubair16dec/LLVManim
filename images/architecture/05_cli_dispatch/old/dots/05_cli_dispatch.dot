@@ -1,0 +1,179 @@
+// LLVManim: CLI Flag Dispatch
+// Shows how the shared pipeline feeds into each flag-gated output path.
+digraph cli_dispatch {
+    graph [
+        fontname    = "Helvetica"
+        fontsize    = 13
+        label       = "LLVManim: CLI Flag Dispatch"
+        labelloc    = "t"
+        splines     = ortho
+        concentrate = false
+        nodesep     = 0.55
+        ranksep     = 1.1
+        pad         = 0.4
+        bgcolor     = "white"
+    ]
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=10 color="#555555" arrowsize=0.85]
+
+    // ── Entry ──────────────────────────────────────────────────────
+    input_ll [label="input.ll"
+              fillcolor="#f1c40f" fontcolor="#2c3e50" shape=note]
+
+    // ── Shared pipeline ────────────────────────────────────────────
+    parse [label="parse_module_to_events()\ningest/llvm_events.py"
+           fillcolor="#27ae60" fontcolor="white"]
+
+    subgraph cluster_shared {
+
+        label     = "Shared pipeline (always runs)"
+        style     = filled
+        fillcolor = "#fce4ec"
+        color     = "#c0397e"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+        fontcolor = "#c0397e"
+
+        build_sg [label="build_scene_graph(mode=\"cfg\")\ntransform/scene.py"
+                  fillcolor="#e67e22" fontcolor="white"]
+        sg       [label="SceneGraph"
+                  fillcolor="#8e44ad" fontcolor="white"]
+        build_sg -> sg
+    }
+
+    // ── Flag-gated outputs ─────────────────────────────────────────
+    subgraph cluster_json {
+
+        label     = "--json"
+        style     = filled
+        fillcolor = "#eafaf1"
+        color     = "#27ae60"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+
+        json_exp [label="json_export.py\nexport_scene_graph_json()"
+                  fillcolor="#2980b9" fontcolor="white"]
+        json_out [label="*_scene_graph.json\n(SceneGraph serialized)"
+                  fillcolor="#e74c3c" fontcolor="white" shape=note]
+        json_exp -> json_out
+    }
+
+    subgraph cluster_draw {
+
+        label     = "--draw"
+        style     = filled
+        fillcolor = "#eafaf1"
+        color     = "#27ae60"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+
+        dot_layout [label="compute_dot_layout()\ningest/dot_layout.py"
+                    fillcolor="#27ae60" fontcolor="white"]
+        gviz_exp   [label="graphviz_export.py\nexport_cfg_dot() / export_cfg_png()"
+                    fillcolor="#2980b9" fontcolor="white"]
+        draw_out   [label="cfg_*.dot\ncfg_*.png"
+                    fillcolor="#e74c3c" fontcolor="white" shape=note]
+        dot_layout -> gviz_exp
+        gviz_exp   -> draw_out
+    }
+
+    subgraph cluster_animate {
+
+        label     = "--animate / --preview"
+        style     = filled
+        fillcolor = "#eaf2ff"
+        color     = "#2980b9"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+
+        ir_mode   [label="ir_mode\nbasic | rich | rich-ssa"
+                   fillcolor="#c0397e" fontcolor="white"]
+        build_ss  [label="build_scene_graph(mode=\"stack\")\ntransform/scene.py"
+                   fillcolor="#e67e22" fontcolor="white"]
+        srenderer [label="StackRenderer\nrender/stack_renderer.py"
+                   fillcolor="#2980b9" fontcolor="white"]
+        anim_out  [label="stack animation\nMP4 / GIF"
+                   fillcolor="#e74c3c" fontcolor="white" shape=note]
+
+        ir_mode  -> build_ss
+        build_ss -> srenderer
+        srenderer -> manim_ce
+    }
+
+    subgraph cluster_cfg_animate {
+
+        label     = "--cfg-animate  (requires --dot-cfg)"
+        style     = filled
+        fillcolor = "#eaf2ff"
+        color     = "#2980b9"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+
+        trace_src  [label="TraceOverlay source:\nload_trace (--import-trace)\nor derive_cfg_trace (auto)"
+                    fillcolor="#636e72" fontcolor="white"]
+        build_ov   [label="_build_overlay_commands()\ntransform/scene.py"
+                    fillcolor="#e67e22" fontcolor="white"]
+        crenderer  [label="CFGRenderer\nrender/cfg_renderer.py"
+                    fillcolor="#2980b9" fontcolor="white"]
+        cfg_out    [label="CFG animation\nMP4 / GIF"
+                    fillcolor="#e74c3c" fontcolor="white" shape=note]
+
+        trace_src -> build_ov
+        build_ov  -> crenderer
+        crenderer -> manim_ce
+    }
+
+    subgraph cluster_export {
+
+        label     = "--export-trace / --export-cfg-edges / --export-analysis-metadata"
+        style     = filled
+        fillcolor = "#fef9e7"
+        color     = "#f39c12"
+        penwidth  = 1.5
+        fontname  = "Helvetica"
+        fontsize  = 11
+
+        exports [label="ingest/trace_io.py\ningest/cfg_edge_io.py\ningest/analysis_metadata_io.py"
+                 fillcolor="#27ae60" fontcolor="white"]
+        exp_out [label="trace.json\n/  cfg_edges.json\n/  metadata.json"
+                 fillcolor="#e74c3c" fontcolor="white" shape=note]
+        exports -> exp_out
+    }
+
+    // ── Edges ──────────────────────────────────────────────────────
+    input_ll -> parse
+    parse    -> build_sg [xlabel=" ProgramEventStream"]
+
+    // SceneGraph fans out to each flag path
+    sg -> json_exp    [xlabel=" --json"]
+    sg -> dot_layout  [xlabel=" --draw"]
+    sg -> ir_mode     [xlabel=" --animate\n--preview"]
+    sg -> trace_src   [xlabel=" --cfg-animate"]
+    dot_layout -> crenderer [xlabel=" DotLayout\n(--dot-cfg)" style=dashed]
+    sg -> exports     [xlabel=" --export-*" style=dashed]
+
+    // Annotations for the -n/--name flag
+    name_flag [label="-n / --name NAME\n(sets base_name for all output files)"
+               fillcolor="#c0397e" fontcolor="white" style="filled" shape=parallelogram]
+    name_flag -> json_out  [style=dashed color="#636e72" arrowhead=none]
+    name_flag -> draw_out  [style=dashed color="#636e72" arrowhead=none]
+    name_flag -> anim_out  [style=dashed color="#636e72" arrowhead=none]
+    name_flag -> cfg_out   [style=dashed color="#636e72" arrowhead=none]
+
+    // ── Third-party libraries ─────────────────────────────────────
+    llvmlite    [label="llvmlite\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+    graphviz    [label="graphviz\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+    manim_ce    [label="Manim CE\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+
+    // 3rd-party import + pipeline edges
+    parse      -> llvmlite  [style=dashed xlabel="  import" color="#999999"]
+    dot_layout -> graphviz  [style=dashed xlabel="  import" color="#999999"]
+    gviz_exp   -> graphviz  [style=dashed xlabel="  import" color="#999999"]
+    manim_ce   -> anim_out
+    manim_ce   -> cfg_out
+}

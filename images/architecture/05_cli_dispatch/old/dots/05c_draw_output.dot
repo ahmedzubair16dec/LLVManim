@@ -1,0 +1,38 @@
+// Extracted subgraph: --draw output from 05_cli_dispatch
+digraph draw_output {
+    graph [
+        fontname = "Helvetica" fontsize = 13
+        label    = "--draw Output Path"
+        labelloc = "t" splines = ortho nodesep = 0.55 ranksep = 0.9
+        pad = 0.4 bgcolor = "white"
+    ]
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=10 color="#555555" arrowsize=0.85]
+
+    // ── External stub ──────────────────────────────────────────────
+    sg [label="SceneGraph\n← Shared pipeline" fillcolor="#f5cba7" fontcolor="#ca6f1e"]
+
+    // ── Internal ───────────────────────────────────────────────────
+    subgraph cluster_draw {
+
+        label = "--draw"
+        style = filled fillcolor = "#eafaf1" color = "#27ae60"
+        penwidth = 1.5 fontname = "Helvetica" fontsize = 11
+
+        dot_layout [label="compute_dot_layout()\ningest/dot_layout.py"
+                    fillcolor="#27ae60" fontcolor="white"]
+        gviz_exp   [label="graphviz_export.py\nexport_cfg_dot() / export_cfg_png()"
+                    fillcolor="#2980b9" fontcolor="white"]
+        draw_out   [label="cfg_*.dot\ncfg_*.png"
+                    fillcolor="#e74c3c" fontcolor="white" shape=note]
+        dot_layout -> gviz_exp
+        gviz_exp   -> draw_out
+    }
+
+    sg -> dot_layout [xlabel=" --draw"]
+
+    // 3rd-party
+    graphviz    [label="graphviz\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+    dot_layout  -> graphviz [style=dashed xlabel="  import" color="#999999"]
+    gviz_exp    -> graphviz [style=dashed xlabel="  import" color="#999999"]
+}

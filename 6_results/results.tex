@@ -129,13 +129,79 @@ End-to-end (entrypoints)        & 6   \\ \hline
 \end{tabularx}
 \end{table}
 
-Line coverage stands at 84\% across the entire \texttt{llvmanim} package. A four-stage quality gate runs on every pull request:
+Line coverage stands at 84\% across the entire \texttt{llvmanim} package. Fig.~\ref{fig:coverage_by_module} shows per-module coverage and Fig.~\ref{fig:tests_per_module} shows the test distribution across modules. A four-stage quality gate runs on every pull request:
 \begin{enumerate}
     \item \textbf{Ruff}: Linting and import sorting
     \item \textbf{Pyright}: Static type checking (strict mode)
     \item \textbf{import-linter}: Architectural boundary enforcement between layers
     \item \textbf{pytest}: Full test suite execution with coverage reporting
 \end{enumerate}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{01_coverage_by_module}}
+\caption{Test coverage by module. Most modules exceed the 80\% threshold; \texttt{render/stack\_renderer} (48\%) and \texttt{render/cfg\_renderer} (62\%) are the primary gaps due to Manim rendering dependencies.}
+\label{fig:coverage_by_module}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{02_tests_per_module}}
+\caption{Test count per module (298 total). CLI, transform, and ingest modules carry the largest test loads.}
+\label{fig:tests_per_module}
+\end{figure}
+
+\subsection{Codebase Size}
+The LLVManim codebase comprises 3{,}189 lines of Python across 18 modules. Fig.~\ref{fig:lines_of_code} shows the breakdown by layer and module. The Render layer accounts for 42\% of the code, followed by Ingest (25\%), Transform (19\%), and CLI (14\%).
+
+\begin{figure*}[!htbp]
+\centerline{\includegraphics[width=\textwidth]{03_lines_of_code}}
+\caption{Lines of code by layer (left) and per module (right). The Render layer is the largest due to the Manim animation logic in \texttt{stack\_renderer} and \texttt{cfg\_animation}.}
+\label{fig:lines_of_code}
+\end{figure*}
+
+\subsection{Performance}
+All pipeline stages exhibit linear scaling behavior, confirming that LLVManim can handle realistically sized LLVM IR inputs. Benchmarks use synthetic IR programs with controlled instruction and block counts (median of 5 runs per data point).
+
+Fig.~\ref{fig:pipeline_latency} shows the relative wall-clock cost of each pipeline stage for a 50-block CFG. The Ingest stage (\texttt{parse\_module\_to\_events}) dominates at 11.6\,ms, while all Transform stages complete in under 0.25\,ms. Fig.~\ref{fig:parse_scaling} confirms that parse time scales linearly with instruction count---$\Theta(n)$ where $n$ is the number of IR instructions.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{10_pipeline_stage_latency}}
+\caption{Pipeline stage latency for a 50-block CFG (median of 5 runs). Parsing dominates; Transform stages are two orders of magnitude faster.}
+\label{fig:pipeline_latency}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{05_parse_scaling}}
+\caption{\texttt{parse\_module\_to\_events} scaling. Linear in instruction count---$\Theta(n)$.}
+\label{fig:parse_scaling}
+\end{figure}
+
+The scene-graph construction stages also scale linearly: \texttt{build\_scene\_graph(mode='cfg')} is $\Theta(n_b)$ in block count (Fig.~\ref{fig:cfg_build_scaling}), \texttt{derive\_cfg\_trace} is $\Theta(n_b)$ for linear-chain CFGs and $O(n_b \cdot k)$ in the presence of loops (Fig.~\ref{fig:trace_scaling}), and \texttt{build\_scene\_graph(mode='stack')} exhibits sub-linear growth empirically (Fig.~\ref{fig:stack_build_scaling}).
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{06_scene_graph_cfg_scaling}}
+\caption{CFG scene-graph build time vs.\ block count---$\Theta(n)$.}
+\label{fig:cfg_build_scaling}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{07_trace_scaling}}
+\caption{CFG trace derivation scaling---$\Theta(n)$ for linear chains, $O(n \cdot k)$ with loops.}
+\label{fig:trace_scaling}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{08_scene_graph_stack_scaling}}
+\caption{Stack scene-graph build time vs.\ call depth---$O(d)$ worst case, sub-linear empirically.}
+\label{fig:stack_build_scaling}
+\end{figure}
+
+Peak memory allocation also grows linearly with IR size for both pipelines (Fig.~\ref{fig:memory_scaling}), confirming no hidden quadratic blowup in the data structures.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{09_memory_scaling}}
+\caption{Peak memory allocation vs.\ CFG block count. Both pipelines scale linearly---$\Theta(n)$.}
+\label{fig:memory_scaling}
+\end{figure}
 
 \subsection{Reproducibility}
 All LLVManim results can be reproduced from the public repository\cite{llvmanim-repo}:

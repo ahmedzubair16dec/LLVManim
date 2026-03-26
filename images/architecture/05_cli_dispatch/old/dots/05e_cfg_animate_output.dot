@@ -1,0 +1,41 @@
+// Extracted subgraph: --cfg-animate output from 05_cli_dispatch
+digraph cfg_animate_output {
+    graph [
+        fontname = "Helvetica" fontsize = 13
+        label    = "--cfg-animate Output Path (requires --dot-cfg)"
+        labelloc = "t" splines = ortho nodesep = 0.7 ranksep = 1.15
+        pad = 0.4 bgcolor = "white"
+    ]
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=10 color="#555555" arrowsize=0.85]
+
+    // ── External stubs ─────────────────────────────────────────────
+    sg         [label="SceneGraph\n← Shared pipeline" fillcolor="#f5cba7" fontcolor="#ca6f1e"]
+    dot_layout [label="compute_dot_layout()\n← --draw" fillcolor="#a9dfbf" fontcolor="#1e8449"]
+
+    // ── Internal ───────────────────────────────────────────────────
+    subgraph cluster_cfg_animate {
+
+        label = "--cfg-animate  (requires --dot-cfg)"
+        style = filled fillcolor = "#eaf2ff" color = "#2980b9"
+        penwidth = 1.5 fontname = "Helvetica" fontsize = 11
+
+        trace_src [label="TraceOverlay source:\nload_trace (--import-trace)\nor derive_cfg_trace (auto)"
+                   fillcolor="#636e72" fontcolor="white"]
+        build_ov  [label="_build_overlay_commands()\ntransform/scene.py"
+                   fillcolor="#e67e22" fontcolor="white"]
+        crenderer [label="CFGRenderer\nrender/cfg_renderer.py"
+                   fillcolor="#2980b9" fontcolor="white"]
+        cfg_out   [label="CFG animation\nMP4 / GIF"
+                   fillcolor="#e74c3c" fontcolor="white" shape=note]
+
+        trace_src -> build_ov
+        build_ov  -> crenderer
+        crenderer -> manim
+    }
+
+    manim      [label="Manim CE\n(3rd party)" fillcolor="#bdc3c7" fontcolor="#2c3e50"]
+    manim      -> cfg_out
+    sg         -> trace_src [minlen=2 xlabel=" --cfg-animate"]
+    dot_layout -> crenderer [style=dashed minlen=2 xlabel=" DotLayout\n(--dot-cfg)"]
+}

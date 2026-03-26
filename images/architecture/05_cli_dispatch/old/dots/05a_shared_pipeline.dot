@@ -1,0 +1,46 @@
+// Extracted subgraph: Shared pipeline from 05_cli_dispatch
+digraph shared_pipeline {
+    graph [
+        fontname = "Helvetica" fontsize = 13
+        label    = "Shared Pipeline (always runs)"
+        labelloc = "t" splines = ortho nodesep = 0.7 ranksep = 1.15
+        pad = 0.4 bgcolor = "white"
+    ]
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=10 color="#555555" arrowsize=0.85]
+
+    // ── External stubs ─────────────────────────────────────────────
+    input_ll [label="input.ll" fillcolor="#fef0bc" fontcolor="#9a6f00" shape=note]
+    parse    [label="parse_module_to_events()\n← Ingest" fillcolor="#a9dfbf" fontcolor="#1e8449"]
+
+    // ── Internal ───────────────────────────────────────────────────
+    subgraph cluster_shared {
+
+        label = "Shared pipeline (always runs)"
+        style = filled fillcolor = "#fce4ec" color = "#c0397e"
+        penwidth = 1.5 fontname = "Helvetica" fontsize = 11 fontcolor = "#c0397e"
+
+        build_sg [label="build_scene_graph(mode=\"cfg\")\ntransform/scene.py"
+                  fillcolor="#e67e22" fontcolor="white"]
+        sg       [label="SceneGraph"
+                  fillcolor="#8e44ad" fontcolor="white"]
+        build_sg -> sg
+    }
+
+    // ── Fan-out stubs ──────────────────────────────────────────────
+    json_path     [label="--json\n→ json_export"     fillcolor="#a9cce3" fontcolor="#1a5276"]
+    draw_path     [label="--draw\n→ dot_layout"      fillcolor="#a9cce3" fontcolor="#1a5276"]
+    animate_path  [label="--animate\n→ StackRenderer" fillcolor="#a9cce3" fontcolor="#1a5276"]
+    cfg_path      [label="--cfg-animate\n→ CFGRenderer" fillcolor="#a9cce3" fontcolor="#1a5276"]
+    export_path   [label="--export-*"                fillcolor="#a9dfbf" fontcolor="#1e8449"]
+
+    // ── Edges ──────────────────────────────────────────────────────
+    input_ll -> parse
+    parse    -> build_sg [minlen=2 xlabel=" ProgramEventStream"]
+
+    sg -> json_path    [minlen=2 xlabel=" --json"]
+    sg -> draw_path    [minlen=2 xlabel=" --draw"]
+    sg -> animate_path [minlen=2 xlabel=" --animate"]
+    sg -> cfg_path     [minlen=2 xlabel=" --cfg-animate"]
+    sg -> export_path  [style=dashed minlen=2 xlabel=" --export-*"]
+}

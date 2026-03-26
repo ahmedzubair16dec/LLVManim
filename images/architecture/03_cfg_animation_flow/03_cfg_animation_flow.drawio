@@ -1,0 +1,347 @@
+<mxfile host="65bd71144e">
+    <diagram id="p03" name="03 CFG Animation Pipeline">
+        <mxGraphModel dx="732" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="550" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n_ill" value="input.ll&lt;br&gt;(LLVM-IR)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="60" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_idot" value="layout.dot&lt;br&gt;(pre-computed Graphviz, optional)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="200" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_itr" value="trace.json&lt;br&gt;(--import-trace, optional)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="340" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_par" value="parse_module_to_events()&lt;br&gt;ingest/llvm_events.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="60" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_meta" value="load_analysis_metadata()&lt;br&gt;ingest/analysis_metadata_io.py&lt;br&gt;(optional, --import-analysis-metadata)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="890" y="10" width="280" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_cedg" value="load_cfg_edges()&lt;br&gt;ingest/cfg_edge_io.py&lt;br&gt;(optional, --import-cfg-edges)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="10" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_dot" value="compute_dot_layout()&lt;br&gt;ingest/dot_layout.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="180" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_sg" value="SceneGraph&lt;br&gt;(nodes, edges, TraceOverlay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8e44ad;fontColor=#FFFFFF;strokeColor=#6c3483;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="490" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_bov" value="_build_overlay_commands()&lt;br&gt;transform/scene.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67e22;fontColor=#FFFFFF;strokeColor=#ca6f1e;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="400" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_cas" value="cfg_animation_scene.py&lt;br&gt;(_CoordMapper, build helpers)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2980b9;fontColor=#FFFFFF;strokeColor=#1a5276;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="200" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_cr" value="CFGRenderer&lt;br&gt;render/cfg_renderer.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2980b9;fontColor=#FFFFFF;strokeColor=#1a5276;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="300" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_man" value="Manim Community Edition&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="910" y="300" width="220" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_odot" value="cfg_*.dot&lt;br&gt;cfg_*.png&lt;br&gt;(--draw)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e74c3c;fontColor=#FFFFFF;strokeColor=#c0392b;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="330" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_omp4" value="cfg animation&lt;br&gt;(MP4 / GIF)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e74c3c;fontColor=#FFFFFF;strokeColor=#c0392b;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="940" y="390" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_llvm" value="llvmlite&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="130" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_gviz" value="graphviz&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="260" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value=".ll path" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_ill" target="n_par" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value=".dot path" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_idot" target="n_dot" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="--import-trace" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="n_itr" target="n_ltr" edge="1">
+                    <mxGeometry x="-0.2265" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="5" value="BlockMetadata&lt;br&gt;(optional)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;dashed=1;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="n_meta" target="n_bsc" edge="1">
+                    <mxGeometry x="0.191" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="6" value="cfg_edges&lt;br&gt;(override)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;dashed=1;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_cedg" target="n_bsc" edge="1">
+                    <mxGeometry x="-0.1333" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="7" value="ProgramEventStream" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="n_par" target="n_bsc" edge="1">
+                    <mxGeometry x="-0.4815" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="665" y="85"/>
+                            <mxPoint x="665" y="123"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" value="--draw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_dot" target="n_odot" edge="1">
+                    <mxGeometry x="0.3333" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" value="DotLayout&lt;br&gt;(node positions)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="n_dot" target="n_cr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="auto-derive" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="n_sg" target="n_dtr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="sets .overlay" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;dashed=1;endArrow=diamondThin;endFill=0;fontSize=10;fontFamily=Helvetica;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="n_ov" target="n_sg" edge="1">
+                    <mxGeometry x="0.1765" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" value="--cfg-animate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_sg" target="n_bov" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="SceneGraph&lt;br&gt;(+commands)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_bov" target="n_cr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="n_cr" target="n_cas" edge="1">
+                    <mxGeometry x="-0.068" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="740" y="290"/>
+                            <mxPoint x="740" y="290"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_cr" target="n_man" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="n_man" target="n_omp4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;jumpSize=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" parent="1" source="n_par" target="n_llvm" edge="1">
+                    <mxGeometry x="-0.7241" relative="1" as="geometry">
+                        <mxPoint x="454.97" y="109.99999999999989" as="sourcePoint"/>
+                        <mxPoint x="494.97" y="170" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="340" y="155"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="22" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="n_dot" target="n_gviz" edge="1">
+                    <mxGeometry x="0.2593" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="23" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="n_cas" target="n_dot" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="930" y="160" as="sourcePoint"/>
+                        <mxPoint x="900" y="160" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="n_bsc" target="n_sg" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="890" y="135"/>
+                            <mxPoint x="890" y="515"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="n_bsc" value="build_scene_graph(mode=&quot;cfg&quot;)&lt;br&gt;transform/scene.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67e22;fontColor=#FFFFFF;strokeColor=#ca6f1e;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="110" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="290" y="410" width="300" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_tr" value="Trace source (load/derive are mutually exclusive)" style="swimlane;startSize=26;fillColor=#f5f6fa;strokeColor=#636e72;rounded=0;fontSize=11;fontFamily=Helvetica;" parent="25" vertex="1">
+                    <mxGeometry width="300" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_ltr" value="load_trace()&lt;br&gt;ingest/trace_io.py&lt;br&gt;(--import-trace)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="c_tr" vertex="1">
+                    <mxGeometry x="20" y="36" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_ov" value="TraceOverlay&lt;br&gt;(entry_order, visited_nodes,&lt;br&gt;traversed_edges, reason)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8e44ad;fontColor=#FFFFFF;strokeColor=#6c3483;fontSize=11;fontFamily=Helvetica;" parent="c_tr" vertex="1">
+                    <mxGeometry x="40" y="120" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="loaded" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="c_tr" source="n_ltr" target="n_ov" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n_dtr" value="derive_cfg_trace()&lt;br&gt;transform/trace.py&lt;br&gt;(auto-derived)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67e22;fontColor=#FFFFFF;strokeColor=#ca6f1e;fontSize=11;fontFamily=Helvetica;container=0;" parent="25" vertex="1">
+                    <mxGeometry x="20" y="195" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="computed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="25" source="n_dtr" target="n_ov" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="p03a" name="03a Trace Source">
+        <mxGraphModel dx="732" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="320" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="a_itr" value="trace.json&lt;br&gt;(--import-trace)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="61" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_sg" value="SceneGraph&lt;br&gt;← build_scene_graph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5cba7;fontColor=#ca6f1e;strokeColor=#ca6f1e;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="205" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tr" value="Trace source (load/derive are mutually exclusive)" style="swimlane;startSize=26;fillColor=#f5f6fa;strokeColor=#636e72;rounded=0;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="270" y="20" width="300" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_ltr" value="load_trace()&lt;br&gt;ingest/trace_io.py&lt;br&gt;(--import-trace)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="a_tr" vertex="1">
+                    <mxGeometry x="20" y="36" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_dtr" value="derive_cfg_trace()&lt;br&gt;transform/trace.py&lt;br&gt;(auto-derived)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67e22;fontColor=#FFFFFF;strokeColor=#ca6f1e;fontSize=11;fontFamily=Helvetica;" parent="a_tr" vertex="1">
+                    <mxGeometry x="20" y="180" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_ov" value="TraceOverlay&lt;br&gt;→ scene_graph.overlay" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5cba7;fontColor=#ca6f1e;strokeColor=#ca6f1e;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="a_tr" vertex="1">
+                    <mxGeometry x="50" y="115" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="loaded" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="a_tr" source="a_ltr" target="a_ov" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="computed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="a_tr" source="a_dtr" target="a_ov" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="--import-trace" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="a_itr" target="a_ltr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="auto-derive" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="a_sg" target="a_dtr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="p03b" name="03b CFG Ingest Path">
+        <mxGraphModel dx="451" dy="629" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="480" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="b_ill" value="input.ll&lt;br&gt;(LLVM-IR)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="50" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_idot" value="layout.dot&lt;br&gt;(pre-computed Graphviz, optional)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fef0bc;fontColor=#9a6f00;strokeColor=#9a6f00;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="250" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_ing" value="Ingest  (llvmanim/ingest/)" style="swimlane;startSize=26;fillColor=#d5f5e3;strokeColor=#1e8449;fontColor=#1e8449;rounded=0;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="20" width="320" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_par" value="parse_module_to_events()&lt;br&gt;ingest/llvm_events.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="b_ing" vertex="1">
+                    <mxGeometry x="20" y="36" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_meta" value="load_analysis_metadata()&lt;br&gt;ingest/analysis_metadata_io.py&lt;br&gt;(optional, --import-analysis-metadata)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="b_ing" vertex="1">
+                    <mxGeometry x="20" y="100" width="280" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_cedg" value="load_cfg_edges()&lt;br&gt;ingest/cfg_edge_io.py&lt;br&gt;(optional, --import-cfg-edges)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="b_ing" vertex="1">
+                    <mxGeometry x="20" y="164" width="280" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_dot" value="compute_dot_layout()&lt;br&gt;ingest/dot_layout.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#27ae60;fontColor=#FFFFFF;strokeColor=#1e8449;fontSize=11;fontFamily=Helvetica;" parent="b_ing" vertex="1">
+                    <mxGeometry x="20" y="228" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_llvm" value="llvmlite&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="110" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_gviz" value="graphviz&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="190" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_bsc" value="build_scene_graph(cfg)&lt;br&gt;→ Transform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5cba7;fontColor=#ca6f1e;strokeColor=#ca6f1e;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="60" width="220" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_cr" value="CFGRenderer&lt;br&gt;→ Render" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a9cce3;fontColor=#1a5276;strokeColor=#1a5276;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="248" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_odot" value="cfg_*.dot / cfg_*.png&lt;br&gt;(--draw)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e74c3c;fontColor=#FFFFFF;strokeColor=#c0392b;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="330" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value=".ll path" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="b_ill" target="b_par" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value=".dot path" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="b_idot" target="b_dot" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="ProgramEventStream" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="b_par" target="b_bsc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="BlockMetadata&lt;br&gt;(optional)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;dashed=1;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="b_meta" target="b_bsc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="cfg_edges&lt;br&gt;(override)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;dashed=1;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="b_cedg" target="b_bsc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="DotLayout&lt;br&gt;(node positions)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="b_dot" target="b_cr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="--draw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="b_dot" target="b_odot" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="b_par" target="b_llvm" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" parent="1" source="b_dot" target="b_gviz" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="p03c" name="03c CFG Render Pipeline">
+        <mxGraphModel dx="451" dy="979" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="350" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="c_dot" value="compute_dot_layout()&lt;br&gt;← Ingest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a9dfbf;fontColor=#1e8449;strokeColor=#1e8449;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="190" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_xfm" value="Transform  (llvmanim/transform/)" style="swimlane;startSize=26;fillColor=#fdebd0;strokeColor=#ca6f1e;fontColor=#ca6f1e;rounded=0;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="30" width="300" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_bov" value="_build_overlay_commands()&lt;br&gt;transform/scene.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67e22;fontColor=#FFFFFF;strokeColor=#ca6f1e;fontSize=11;fontFamily=Helvetica;" parent="c_xfm" vertex="1">
+                    <mxGeometry x="20" y="36" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_ren" value="Render  (llvmanim/render/)" style="swimlane;startSize=26;fillColor=#d4e6f1;strokeColor=#1a5276;fontColor=#1a5276;rounded=0;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="-100" width="300" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_cas" value="cfg_animation_scene.py&lt;br&gt;(_CoordMapper, build helpers)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2980b9;fontColor=#FFFFFF;strokeColor=#1a5276;fontSize=11;fontFamily=Helvetica;" parent="c_ren" vertex="1">
+                    <mxGeometry x="10" y="36" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_cr" value="CFGRenderer&lt;br&gt;render/cfg_renderer.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2980b9;fontColor=#FFFFFF;strokeColor=#1a5276;fontSize=11;fontFamily=Helvetica;" parent="c_ren" vertex="1">
+                    <mxGeometry x="10" y="165" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_omp4" value="cfg animation&lt;br&gt;(MP4 / GIF)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#e74c3c;fontColor=#FFFFFF;strokeColor=#c0392b;backgroundOutline=1;size=14;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="950" y="175" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="SceneGraph&lt;br&gt;(+commands)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="c_bov" target="c_cr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="DotLayout&lt;br&gt;(node positions)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="c_dot" target="c_cr" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="660" y="180" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="39" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;" parent="1" source="c_cr" target="c_cas" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="«import»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;dashed=1;endArrow=open;endFill=0;fontSize=10;fontFamily=Helvetica;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="c_cas" target="c_dot">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="c_cr" target="c_man" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="c_man" target="c_omp4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_sg" value="SceneGraph&lt;br&gt;← build_scene_graph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7bde2;fontColor=#6c3483;strokeColor=#6c3483;dashed=1;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="66" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="--cfg-animate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;endArrow=block;endFill=1;fontSize=10;fontFamily=Helvetica;" parent="1" source="c_sg" target="c_bov" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="c_man" value="Manim Community Edition&lt;br&gt;(3rd party)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdc3c7;fontColor=#2c3e50;strokeColor=#95a5a6;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="65" width="260" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
