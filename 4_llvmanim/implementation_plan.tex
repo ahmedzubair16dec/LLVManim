@@ -1,10 +1,10 @@
-LLVManim is implemented as a three-layer pipeline---\textbf{Ingestion}, \textbf{Transformation}, and \textbf{Render}---orchestrated by a dedicated \textbf{CLI} entry point. The high-level structure is shown in Fig.~\ref{fig:architecture_overview}; the detailed module-level decomposition is given in Fig.~\ref{fig:architecture_detail}. Layer boundaries are enforced at build time by \texttt{import-linter}, ensuring that no module in a lower layer imports from a higher one. The entire codebase is written in Python~3.12 and managed with \texttt{uv}.
+LLVManim is implemented as a three-layer pipeline---\textbf{Ingestion}, \textbf{Transformation}, and \textbf{Render}---orchestrated by a dedicated \textbf{CLI} entry point. The high-level structure is shown in Fig.~\ref{fig:architecture_detail}. Layer boundaries are enforced at build time by \texttt{import-linter}, ensuring that no module in a lower layer imports from a higher one. The entire codebase is written in Python~3.12 and managed with \texttt{uv}.
 
-\begin{figure*}[htbp]
-\centerline{\includegraphics[height=0.6\textheight, keepaspectratio]{architecture_overview}}
-\caption{High-level three-layer architecture of LLVManim.}
-\label{fig:architecture_overview}
-\end{figure*}
+% \begin{figure*}[htbp]
+% \centerline{\includegraphics[height=0.6\textheight, keepaspectratio]{architecture_overview}}
+% \caption{High-level three-layer architecture of LLVManim.}
+% \label{fig:architecture_overview}
+% \end{figure*}
 
 \begin{figure*}[htbp]
 \centerline{\includegraphics[height=0.88\textheight]{01_architecture_overview_vertical}}
@@ -60,7 +60,7 @@ The Ingestion layer extracts program structure from LLVM IR. It uses the \texttt
 The Transformation layer converts the ingest output into an intermediate scene graph and execution traces suitable for rendering. The complete data model spanning all three layers is shown in Fig.~\ref{fig:data_model}.
 
 \begin{figure*}[!htbp]
-\centerline{\includegraphics[width=\textwidth]{04_data_model}}
+\centerline{\includegraphics[width=1.15\textwidth]{04_data_model}}
 \caption{Unified data model. Ingest types (\texttt{ProgramEventStream}, \texttt{IREvent}, \texttt{CFGEdge}, \texttt{DotLayout}) feed into Transform types (\texttt{SceneGraph}, \texttt{SceneNode}, \texttt{SceneEdge}, \texttt{AnimationCommand}, \texttt{TraceOverlay}) which are consumed by Render types (\texttt{CommandDrivenScene}, \texttt{StackRenderer}, \texttt{CFGRenderer}).}
 \label{fig:data_model}
 \end{figure*}

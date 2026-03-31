@@ -57,6 +57,7 @@ CFG edge extraction supports five terminator types: \texttt{br}, \texttt{switch}
 LLVManim provides three stack-focused animation modes and one graph-based mode, each reproducible with a single CLI command. Fig.~\ref{fig:animation_modes} shows representative frames from all three stack modes.
 
 \textbf{Basic mode} (\texttt{--ir-mode basic}) renders a minimal stack-only view. Each IR instruction triggers a per-cell badge flash on the corresponding stack slot, providing a clean visual pulse of execution without additional clutter. This mode is best suited for audiences who need only a high-level sense of execution flow, such as introductory lectures or quick demonstrations, since it strips away all source-level detail and focuses purely on the call stack.
+\needspace{2\baselineskip}
 \begin{lstlisting}[language=bash,gobble=0]
 uv run llvmanim input.ll --animate \
     --ir-mode basic --outdir out/
