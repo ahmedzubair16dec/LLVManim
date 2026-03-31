@@ -1,0 +1,93 @@
+@startuml 04b_ingest_layer
+title Ingest Layer
+
+skinparam classAttributeIconSize 0
+skinparam ArrowColor #555555
+skinparam ArrowFontColor #555555
+skinparam ArrowFontSize 12
+skinparam Padding 5
+skinparam RoundCorner 0
+
+skinparam class {
+    FontSize 13
+    HeaderFontSize 14
+
+    BackgroundColor<<Literal>> #8e44ad
+    BorderColor<<Literal>>     #6c3483
+    FontColor<<Literal>>       #FFFFFF
+    AttributeBackgroundColor<<Literal>> #f3e5f5
+    AttributeFontColor<<Literal>>       #2c3e50
+
+    BackgroundColor<<ingest>>            #27ae60
+    BorderColor<<ingest>>                #1e8449
+    FontColor<<ingest>>                  #FFFFFF
+    AttributeBackgroundColor<<ingest>>   #eafaf1
+    AttributeFontColor<<ingest>>         #2c3e50
+}
+
+' ── Literal stubs ──────────────────────────────────────────────
+class EventKind <<Literal>> {
+    "alloca" | "load" | "store"
+    "binop" | "compare"
+    "call" | "ret" | "br" | "other"
+}
+
+' ── Ingest dataclasses ─────────────────────────────────────────
+class IREvent <<ingest>> {
+    + function_name : str
+    + block_name : str
+    + opcode : str
+    + text : str
+    + kind : EventKind
+    + index_in_function : int
+    + debug_line : int | None
+    + operands : list[str]
+}
+
+class CFGEdge <<ingest>> {
+    + source : str
+    + target : str
+    + kind : str
+    + label : str
+}
+
+class ProgramEventStream <<ingest>> {
+    + source_path : str
+    + events : list[IREvent]
+    + cfg_edges : list[CFGEdge]
+    + display_lines : dict[str, list[str]]
+}
+
+class DotNodeLayout <<ingest>> {
+    + name : str
+    + label : str
+    + center_x : float
+    + center_y : float
+    + width : float
+    + height : float
+}
+
+class DotEdgeLayout <<ingest>> {
+    + source : str
+    + target : str
+    + label : str
+    + tailport : str
+    + spline_points : list[tuple[float, float]]
+}
+
+class DotLayout <<ingest>> {
+    + nodes : dict[str, DotNodeLayout]
+    + edges : list[DotEdgeLayout]
+    + bounding_box : tuple[float, float, float, float]
+}
+
+' ── Relationships ──────────────────────────────────────────────
+ProgramEventStream *--> "events [*]"    IREvent
+ProgramEventStream *--> "cfg_edges [*]" CFGEdge
+
+DotLayout *--> "nodes [*]" DotNodeLayout
+DotLayout *--> "edges [*]" DotEdgeLayout
+
+IREvent ..> EventKind : «uses» kind
+
+@enduml

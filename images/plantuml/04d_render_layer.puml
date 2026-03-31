@@ -1,0 +1,54 @@
+@startuml 04d_render_layer
+title Render Layer
+
+skinparam classAttributeIconSize 0
+skinparam ArrowColor #555555
+skinparam ArrowFontColor #555555
+skinparam ArrowFontSize 12
+skinparam Padding 5
+skinparam RoundCorner 0
+
+skinparam class {
+    FontSize 13
+    HeaderFontSize 14
+
+    BackgroundColor<<ingest-ref>>    #a9dfbf
+    BorderColor<<ingest-ref>>        #27ae60
+    FontColor<<ingest-ref>>          #1e8449
+
+    BackgroundColor<<transform-ref>> #f0b27a
+    BorderColor<<transform-ref>>     #e67e22
+    FontColor<<transform-ref>>       #ca6f1e
+
+    BackgroundColor<<render>>        #2980b9
+    BorderColor<<render>>            #1a5276
+    FontColor<<render>>              #FFFFFF
+    AttributeBackgroundColor<<render>> #ebf5fb
+    AttributeFontColor<<render>>     #2c3e50
+}
+
+' -- Stubs from other layers ----------------------------------------
+class DotLayout <<ingest-ref>> {
+    (Ingest Layer)
+}
+class SceneGraph <<transform-ref>> {
+    (Transform Layer)
+}
+
+' ── Render classes ───────────────────────────────────────────
+abstract class CommandDrivenScene <<render>> {
+    --
+    + construct() : None
+}
+
+class CFGRenderer   <<render>> { }
+class StackRenderer <<render>> { }
+
+' ── Relationships ─────────────────────────────────────────────
+CFGRenderer   --|> CommandDrivenScene
+StackRenderer --|> CommandDrivenScene
+
+CommandDrivenScene ..> SceneGraph : «uses» graph
+CFGRenderer        ..> DotLayout  : «uses» layout
+
+@enduml

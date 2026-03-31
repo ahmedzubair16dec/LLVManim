@@ -1,0 +1,276 @@
+@startuml 04_data_model
+!pragma layout elk
+title Core Data Model
+
+skinparam classAttributeIconSize 0
+skinparam ArrowColor #555555
+skinparam ArrowFontColor #555555
+skinparam ArrowFontSize 12
+skinparam Padding 5
+skinparam RoundCorner 0
+
+skinparam class {
+    FontSize 13
+    HeaderFontSize 14
+
+    BackgroundColor<<Literal>>           #8e44ad
+    BorderColor<<Literal>>               #6c3483
+    FontColor<<Literal>>                 #FFFFFF
+    AttributeBackgroundColor<<Literal>>  #f3e5f5
+    AttributeFontColor<<Literal>>        #2c3e50
+
+    BackgroundColor<<ingest>>            #27ae60
+    BorderColor<<ingest>>                #1e8449
+    FontColor<<ingest>>                  #FFFFFF
+    AttributeBackgroundColor<<ingest>>   #eafaf1
+    AttributeFontColor<<ingest>>         #2c3e50
+
+    BackgroundColor<<transform>>         #e67e22
+    BorderColor<<transform>>             #ca6f1e
+    FontColor<<transform>>               #FFFFFF
+    AttributeBackgroundColor<<transform>> #fef9e7
+    AttributeFontColor<<transform>>      #2c3e50
+
+    BackgroundColor<<render>>            #2980b9
+    BorderColor<<render>>                #1a5276
+    FontColor<<render>>                  #FFFFFF
+    AttributeBackgroundColor<<render>>   #ebf5fb
+    AttributeFontColor<<render>>         #2c3e50
+}
+
+' ════════════════════════════════════════════════════════════════
+'  LITERAL TYPES
+' ════════════════════════════════════════════════════════════════
+package "Literal Types" #f3e5f520 {
+
+    class EventKind <<Literal>> {
+        "alloca"
+        "load"
+        "store"
+        --
+        "binop" | "compare"
+        --
+        "call" | "ret" | "br" | "other"
+    }
+
+    class BlockRole <<Literal>> {
+        "entry"
+        "linear"
+        --
+        "branch" | "merge"
+        --
+        "exit"
+    }
+
+    class ActionKind <<Literal>> {
+        "create_stack_slot"
+        --
+        "animate_memory_read"
+        "animate_memory_write"
+        --
+        "animate_binop"
+        "animate_compare"
+        --
+        "push_stack_frame"
+        "pop_stack_frame"
+        --
+        "highlight_branch"
+        "signal_stack_underflow"
+        --
+        "enter_block"
+        "exit_block"
+        "traverse_edge"
+    }
+}
+
+' ════════════════════════════════════════════════════════════════
+'  INGEST LAYER
+' ════════════════════════════════════════════════════════════════
+package "Ingest Layer" #d5f5e320 {
+
+    class IREvent <<ingest>> {
+        + function_name : str
+        + block_name : str
+        + opcode : str
+        + text : str
+        + kind : EventKind
+        + index_in_function : int
+        + debug_line : int | None
+        + operands : list[str]
+    }
+
+    class CFGEdge <<ingest>> {
+        + source : str
+        + target : str
+        + kind : str
+        + label : str
+    }
+
+    class ProgramEventStream <<ingest>> {
+        + source_path : str
+        + events : list[IREvent]
+        + cfg_edges : list[CFGEdge]
+        + display_lines : dict[str, list[str]]
+    }
+
+    class DotNodeLayout <<ingest>> {
+        + name : str
+        + label : str
+        + center_x : float
+        + center_y : float
+        + width : float
+        + height : float
+    }
+
+    class DotEdgeLayout <<ingest>> {
+        + source : str
+        + target : str
+        + label : str
+        + tailport : str
+        + spline_points : list[tuple[float, float]]
+    }
+
+    class DotLayout <<ingest>> {
+        + nodes : dict[str, DotNodeLayout]
+        + edges : list[DotEdgeLayout]
+        + bounding_box : tuple[float, float, float, float]
+    }
+}
+
+' ════════════════════════════════════════════════════════════════
+'  TRANSFORM LAYER
+' ════════════════════════════════════════════════════════════════
+package "Transform Layer" #fdebd020 {
+
+    class CFGBlock <<transform>> {
+        + id : str
+        + name : str
+        + function_name : str
+        + role : BlockRole
+        + events : list[IREvent]
+        + memory_ops : list[IREvent]
+        + terminator_opcode : str | None
+        + indegree : int
+        + outdegree : int
+        + idom : str | None
+        + dom_depth : int
+        + is_loop_header : bool
+        + loop_depth : int
+        + loop_id : str | None
+        + is_backedge_target : bool
+    }
+
+    class BlockMetadata <<transform>> {
+        + idom : str | None
+        + dom_depth : int
+        + is_loop_header : bool
+        + loop_depth : int
+        + loop_id : str | None
+        + is_backedge_target : bool
+    }
+
+    class AnimationCommand <<transform>> {
+        + action : ActionKind
+        + target : str
+        + event : IREvent | None
+        + params : dict[str, Any]
+    }
+
+    class SceneNode <<transform>> {
+        + id : str
+        + label : str
+        + kind : str
+        + properties : dict[str, Any]
+        + animation_hint : str
+    }
+
+    class SceneEdge <<transform>> {
+        + source : str
+        + target : str
+        + label : str
+        + kind : str
+        + properties : dict[str, Any]
+    }
+
+    class TraceOverlay <<transform>> {
+        + entry_order : list[str]
+        + visited_nodes : list[str]
+        + traversed_edges : list[tuple[str, str]]
+        + termination_reason : str
+    }
+
+    class SceneGraph <<transform>> {
+        + nodes : list[SceneNode]
+        + edges : list[SceneEdge]
+        + commands : list[AnimationCommand]
+        + overlay : TraceOverlay | None
+    }
+}
+
+' ════════════════════════════════════════════════════════════════
+'  RENDER LAYER
+' ════════════════════════════════════════════════════════════════
+package "Render Layer" #d4e6f120 {
+
+    abstract class CommandDrivenScene <<render>> {
+        --
+        + construct() : None
+    }
+
+    class CFGRenderer <<render>> {
+    }
+
+    class StackRenderer <<render>> {
+    }
+}
+
+' ════════════════════════════════════════════════════════════════
+'  HIDDEN LAYOUT HINTS  (enforce Literal → Ingest → Transform → Render)
+' ════════════════════════════════════════════════════════════════
+' Ingest below Literal
+IREvent              -[hidden]u-> EventKind
+ProgramEventStream   -[hidden]u-> ActionKind
+ProgramEventStream   -[hidden]u-> BlockRole
+' Transform below Ingest
+CFGBlock             -[hidden]u-> IREvent
+SceneGraph           -[hidden]u-> DotLayout
+' Render below Transform
+CommandDrivenScene   -[hidden]u-> SceneGraph
+CFGRenderer          -[hidden]u-> CFGBlock
+
+' ════════════════════════════════════════════════════════════════
+'  INGEST-LAYER RELATIONSHIPS
+' ════════════════════════════════════════════════════════════════
+ProgramEventStream *--> "events [*]" IREvent
+ProgramEventStream *--> "cfg_edges [*]" CFGEdge
+
+DotLayout *--> "nodes [*]" DotNodeLayout
+DotLayout *--> "edges [*]" DotEdgeLayout
+
+IREvent ..> EventKind : «uses» kind
+
+' ════════════════════════════════════════════════════════════════
+'  TRANSFORM-LAYER RELATIONSHIPS
+' ════════════════════════════════════════════════════════════════
+CFGBlock *--> "events [*]" IREvent
+CFGBlock *--> "memory_ops [*]" IREvent
+CFGBlock ..> BlockRole : «uses» role
+
+AnimationCommand o..> "event [0..1]" IREvent
+AnimationCommand ..> ActionKind : «uses» action
+
+SceneGraph *--> "nodes [*]" SceneNode
+SceneGraph *--> "edges [*]" SceneEdge
+SceneGraph *--> "commands [*]" AnimationCommand
+SceneGraph o..> "overlay [0..1]" TraceOverlay
+
+' ════════════════════════════════════════════════════════════════
+'  RENDER-LAYER RELATIONSHIPS
+' ════════════════════════════════════════════════════════════════
+CFGRenderer     --|> CommandDrivenScene
+StackRenderer   --|> CommandDrivenScene
+
+CommandDrivenScene ..> SceneGraph  : «uses» graph
+CFGRenderer        ..> DotLayout   : «uses» layout
+
+@enduml

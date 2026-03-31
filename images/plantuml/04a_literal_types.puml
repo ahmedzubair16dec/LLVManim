@@ -1,0 +1,61 @@
+@startuml 04a_literal_types
+title Literal Types
+
+skinparam classAttributeIconSize 0
+skinparam ArrowColor #555555
+skinparam Padding 5
+skinparam RoundCorner 0
+
+skinparam class {
+    FontSize 13
+    HeaderFontSize 14
+
+    BackgroundColor<<Literal>> #8e44ad
+    BorderColor<<Literal>>     #6c3483
+    FontColor<<Literal>>       #FFFFFF
+    AttributeBackgroundColor<<Literal>> #f3e5f5
+    AttributeFontColor<<Literal>>       #2c3e50
+}
+
+left to right direction
+
+class EventKind <<Literal>> {
+    "alloca"
+    "load"
+    "store"
+    --
+    "binop" | "compare"
+    --
+    "call" | "ret" | "br" | "other"
+}
+
+class BlockRole <<Literal>> {
+    "entry"
+    "linear"
+    --
+    "branch" | "merge"
+    --
+    "exit"
+}
+
+class ActionKind <<Literal>> {
+    "create_stack_slot"
+    --
+    "animate_memory_read"
+    "animate_memory_write"
+    --
+    "animate_binop"
+    "animate_compare"
+    --
+    "push_stack_frame"
+    "pop_stack_frame"
+    --
+    "highlight_branch"
+    "signal_stack_underflow"
+    --
+    "enter_block"
+    "exit_block"
+    "traverse_edge"
+}
+
+@enduml

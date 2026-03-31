@@ -1,10 +1,10 @@
 LLVManim is implemented as a three-layer pipeline---\textbf{Ingestion}, \textbf{Transformation}, and \textbf{Render}---orchestrated by a dedicated \textbf{CLI} entry point. The high-level structure is shown in Fig.~\ref{fig:architecture_overview}; the detailed module-level decomposition is given in Fig.~\ref{fig:architecture_detail}. Layer boundaries are enforced at build time by \texttt{import-linter}, ensuring that no module in a lower layer imports from a higher one. The entire codebase is written in Python~3.12 and managed with \texttt{uv}.
 
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=0.85\linewidth]{architecture_overview}}
+\begin{figure*}[htbp]
+\centerline{\includegraphics[height=0.6\textheight, keepaspectratio]{architecture_overview}}
 \caption{High-level three-layer architecture of LLVManim.}
 \label{fig:architecture_overview}
-\end{figure}
+\end{figure*}
 
 \begin{figure*}[htbp]
 \centerline{\includegraphics[height=0.88\textheight]{01_architecture_overview_vertical}}

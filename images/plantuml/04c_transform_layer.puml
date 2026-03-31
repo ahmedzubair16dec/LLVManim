@@ -1,0 +1,117 @@
+@startuml 04c_transform_layer
+title Transform Layer
+
+skinparam classAttributeIconSize 0
+skinparam ArrowColor #555555
+skinparam ArrowFontColor #555555
+skinparam ArrowFontSize 12
+skinparam Padding 5
+skinparam RoundCorner 0
+
+skinparam class {
+    FontSize 13
+    HeaderFontSize 14
+
+    BackgroundColor<<Literal>>           #8e44ad
+    BorderColor<<Literal>>               #6c3483
+    FontColor<<Literal>>                 #FFFFFF
+    AttributeBackgroundColor<<Literal>>  #f3e5f5
+    AttributeFontColor<<Literal>>        #2c3e50
+
+    BackgroundColor<<ingest-ref>>        #a9dfbf
+    BorderColor<<ingest-ref>>            #27ae60
+    FontColor<<ingest-ref>>              #1e8449
+
+    BackgroundColor<<transform>>         #e67e22
+    BorderColor<<transform>>             #ca6f1e
+    FontColor<<transform>>               #FFFFFF
+    AttributeBackgroundColor<<transform>> #fef9e7
+    AttributeFontColor<<transform>>      #2c3e50
+}
+
+' ── Stubs from other layers ──────────────────────────────────
+class BlockRole  <<Literal>>    { }
+class ActionKind <<Literal>>    { }
+class IREvent    <<ingest-ref>> {
+    (Ingest Layer)
+}
+
+' ── Transform dataclasses ─────────────────────────────────────
+class CFGBlock <<transform>> {
+    + id : str
+    + name : str
+    + function_name : str
+    + role : BlockRole
+    + events : list[IREvent]
+    + memory_ops : list[IREvent]
+    + terminator_opcode : str | None
+    + indegree : int
+    + outdegree : int
+    + idom : str | None
+    + dom_depth : int
+    + is_loop_header : bool
+    + loop_depth : int
+    + loop_id : str | None
+    + is_backedge_target : bool
+}
+
+class BlockMetadata <<transform>> {
+    + idom : str | None
+    + dom_depth : int
+    + is_loop_header : bool
+    + loop_depth : int
+    + loop_id : str | None
+    + is_backedge_target : bool
+}
+
+class AnimationCommand <<transform>> {
+    + action : ActionKind
+    + target : str
+    + event : IREvent | None
+    + params : dict[str, Any]
+}
+
+class SceneNode <<transform>> {
+    + id : str
+    + label : str
+    + kind : str
+    + properties : dict[str, Any]
+    + animation_hint : str
+}
+
+class SceneEdge <<transform>> {
+    + source : str
+    + target : str
+    + label : str
+    + kind : str
+    + properties : dict[str, Any]
+}
+
+class TraceOverlay <<transform>> {
+    + entry_order : list[str]
+    + visited_nodes : list[str]
+    + traversed_edges : list[tuple[str, str]]
+    + termination_reason : str
+}
+
+class SceneGraph <<transform>> {
+    + nodes : list[SceneNode]
+    + edges : list[SceneEdge]
+    + commands : list[AnimationCommand]
+    + overlay : TraceOverlay | None
+}
+
+' ── Relationships ─────────────────────────────────────────────
+CFGBlock *--> "events [*]"     IREvent
+CFGBlock *--> "memory_ops [*]" IREvent
+CFGBlock ..> BlockRole  : «uses» role
+
+AnimationCommand o..> "event [0..1]" IREvent
+AnimationCommand ..> ActionKind : «uses» action
+
+SceneGraph *--> "nodes [*]"    SceneNode
+SceneGraph *--> "edges [*]"    SceneEdge
+SceneGraph *--> "commands [*]" AnimationCommand
+SceneGraph o..> "overlay [0..1]" TraceOverlay
+
+@enduml
