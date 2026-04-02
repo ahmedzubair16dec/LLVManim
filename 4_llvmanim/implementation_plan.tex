@@ -28,8 +28,14 @@ The \texttt{llvmanim.cli} module is the user-facing entry point. It accepts LLVM
     $ uv run llvmanim input.ll --cfg-animate \
         --dot-cfg main.dot --import-trace trace.json \
         --outdir out/
-    \end{lstlisting}
-When the tool encounters unsupported IR constructs, missing debug metadata, or malformed input, it emits a descriptive error message and continues processing the remainder of the program where possible.
+\end{lstlisting}
+Fig.~\ref{fig:cli_dispatch} traces the complete CLI dispatch flow, showing how each command flag routes through the shared Ingest pipeline to the appropriate Transform and Render stages. When the tool encounters unsupported IR constructs, missing debug metadata, or malformed input, it emits a descriptive error message and continues processing the remainder of the program where possible.
+
+\begin{figure*}[htbp]
+\centerline{\includegraphics[width=\textwidth]{05_cli_dispatch}}
+\caption{CLI dispatch flow. Each command flag (\texttt{--json}, \texttt{--draw}, \texttt{--animate}, \texttt{--cfg-animate}) shares the Ingest pipeline and branches to the appropriate Transform and Render stages.}
+\label{fig:cli_dispatch}
+\end{figure*}
 
 \subsubsection{Ingestion Layer}
 The Ingestion layer extracts program structure from LLVM IR. It uses the \texttt{llvmlite}\cite{llvmlite} Python binding to parse \texttt{.ll} files and also supports importing pre-computed data from JSON.
@@ -48,14 +54,6 @@ The Ingestion layer extracts program structure from LLVM IR. It uses the \texttt
     \item \textbf{\texttt{display\_lines.py}:} Cleans raw IR text into per-function line lists used by the rich animation panels.
 \end{itemize}
 
-\noindent Fig.~\ref{fig:cli_dispatch} traces the complete CLI dispatch flow, showing how each command flag routes through the shared Ingest pipeline to the appropriate Transform and Render stages.
-
-\begin{figure*}[!htbp]
-\centerline{\includegraphics[width=\textwidth]{05_cli_dispatch}}
-\caption{CLI dispatch flow. Each command flag (\texttt{--json}, \texttt{--draw}, \texttt{--animate}, \texttt{--cfg-animate}) shares the Ingest pipeline and branches to the appropriate Transform and Render stages.}
-\label{fig:cli_dispatch}
-\end{figure*}
-
 \subsubsection{Transformation Layer}
 The Transformation layer converts the ingest output into an intermediate scene graph and execution traces suitable for rendering. The complete data model spanning all three layers is shown in Fig.~\ref{fig:data_model}.
 
@@ -66,9 +64,9 @@ The Transformation layer converts the ingest output into an intermediate scene g
 \end{figure*}
 
 \begin{itemize}
-    \item \textbf{\texttt{models.py}:} Defines the core data model---\texttt{SceneGraph}, \texttt{SceneNode}, \texttt{SceneEdge}, \texttt{CFGBlock}, \texttt{TraceOverlay}, and~\texttt{BlockMetadata}. Also defines \texttt{AnimationCommand} and \texttt{ActionKind}, the typed animation primitives consumed by the Render layer. Nodes carry a~\texttt{kind} string and an open \texttt{properties} dict, with an optional \texttt{animation\_hint} string. \texttt{SceneGraph} embeds an ordered \texttt{commands} list alongside its nodes and edges.
+    \item \textbf{\texttt{models.py}:} Defines the core data model---\texttt{SceneGraph}, \texttt{SceneNode}, \texttt{SceneEdge}, \texttt{CFGBlock}, \texttt{TraceOverlay}, and \texttt{BlockMetadata}. Also defines \texttt{AnimationCommand} and \texttt{ActionKind}, the typed animation primitives consumed by the Render layer. Nodes carry a~\texttt{kind} string and an open \texttt{properties} dict, with an optional \texttt{animation\_hint} string. \texttt{SceneGraph} embeds an ordered \texttt{commands} list alongside its nodes and edges.
 
-    \item \textbf{\texttt{scene.py}:} The \texttt{build\_scene\_graph} function groups events by function and block, attaches typed CFG edges, assigns block roles, applies optional domtree/loop metadata, and populates \texttt{SceneGraph.commands} via the overlay builder. \texttt{build\_stack\_scene\_graph} produces a call-tree-ordered \texttt{SceneGraph} with a fully populated \texttt{commands} list---translating the \texttt{ProgramEventStream} directly into \texttt{AnimationCommand} records (carrying \texttt{ActionKind}, \texttt{target}, and \texttt{params}) ready for consumption by the Render layer.
+    \item \textbf{\texttt{scene.py}:} The \texttt{build\_scene\_graph} function groups events by function and block, attaches typed CFG edges, assigns block roles, applies optional domtree/loop metadata, and populates \texttt{SceneGraph.commands} via the overlay builder. \texttt{build\_stack\_scene\_graph} produces a call-tree-ordered \texttt{SceneGraph} with a fully populated \texttt{commands} list, translating the parsed \texttt{\allowbreak ProgramEventStream} directly into typed \texttt{\allowbreak AnimationCommand} records (carrying \texttt{ActionKind}, \texttt{target}, and \texttt{params}) ready for consumption by the Render layer.
 
     \item \textbf{\texttt{trace.py}:} The \texttt{build\_execution\_trace} function produces a~list of \texttt{TraceStep} or~\texttt{RichTraceStep} records capturing the execution order with optional SSA result values for \texttt{binop}, \texttt{compare}, and~\texttt{load} instructions.
 \end{itemize}
@@ -84,11 +82,11 @@ The Render layer renders the scene graph using Manim Community Edition\cite{mani
         \item \texttt{--ir-mode rich-ssa}: Three-column layout (IR Source $\mid$ SSA Values $\mid$ Stack) showing computed results for binary operations, comparisons, and loads.
     \end{itemize}
 
-    \item \textbf{CFG Traversal:} \texttt{--cfg-animate} renders an animated walk through the control-flow graph using \texttt{CFGRenderer}---another \texttt{CommandDrivenScene} subclass---with DOT-derived node positions (\texttt{--dot-cfg}) and a runtime trace (\texttt{--import-trace}). If no trace is provided, a static DFS trace is derived automatically.
+    \item \textbf{CFG Traversal:} \texttt{--cfg-animate} renders an animated walk through the control-flow graph using \texttt{CFGRenderer} (another \texttt{CommandDrivenScene} subclass) with DOT-derived node positions (\texttt{--dot-cfg}) and a runtime trace (\texttt{--import-trace}). If no trace is provided, a static DFS trace is derived automatically.
 
     \item \textbf{Export:} Static artifacts complement the animated output.
     \begin{itemize}
-        \item \texttt{--json}: Writes a~machine-readable \texttt{scene\_graph.json} file.
+        \item \texttt{--json}: Writes a~machine-readable scene graph (\texttt{scene\_graph.json}).
         \item \texttt{--draw}: Writes \texttt{cfg\_main.dot} and, when Graphviz is available, a~rendered \texttt{cfg\_main.png}.
     \end{itemize}
 

@@ -18,10 +18,10 @@ OUT = Path(__file__).parent
 
 # ── Palette ────────────────────────────────────────────────────────────────────
 LAYER_COLORS = {
-    "cli": "#e67e22",
-    "ingest": "#2980b9",
-    "transform": "#8e44ad",
-    "render": "#27ae60",
+    "cli": "#C0397E",
+    "ingest": "#27AE60",
+    "transform": "#E67E22",
+    "render": "#2980B9",
 }
 COVERAGE_COLORS = {
     "high": "#27ae60",  # >= 95 %

@@ -24,10 +24,10 @@ OUT = Path(__file__).parent
 BG = "#f8f9fa"
 
 # ── Colour palette ─────────────────────────────────────────────────────────────
-C_INGEST = "#2980b9"
-C_TRANSFORM = "#8e44ad"
-C_TRACE = "#e67e22"
-C_STACK = "#27ae60"
+C_INGEST = "#27AE60"
+C_TRANSFORM = "#E67E22"
+C_TRACE = "#E67E22"       # derive_cfg_trace is also in the transform layer
+C_STACK = "#CA6F1E"       # darker transform amber — pairs with C_TRANSFORM on the memory chart
 C_MEMORY = "#c0392b"
 
 REPEATS = 5  # median over N runs
@@ -337,8 +337,10 @@ def chart_trace_scaling() -> None:
     ax.text(
         0.05,
         0.95,
-        r"Complexity:  $\Theta(n)$  (linear chain CFG)" "\n"
-        r"$O(n \cdot k)$ in general,  $k$ = loop-iteration bound" "\n"
+        r"Complexity:  $\Theta(n)$  (linear chain CFG)"
+        "\n"
+        r"$O(n \cdot k)$ in general,  $k$ = loop-iteration bound"
+        "\n"
         r"$n$ = CFG block count",
         transform=ax.transAxes,
         fontsize=10,
@@ -408,8 +410,10 @@ def chart_scene_graph_stack_scaling() -> None:
     ax.text(
         0.05,
         0.95,
-        r"Complexity:  $O(d)$  worst case" "\n"
-        r"$o(d)$  empirically (sub-linear growth observed)" "\n"
+        r"Complexity:  $O(d)$  worst case"
+        "\n"
+        r"$o(d)$  empirically (sub-linear growth observed)"
+        "\n"
         r"$d$ = call-tree depth",
         transform=ax.transAxes,
         fontsize=10,
@@ -571,9 +575,12 @@ def chart_pipeline_stage_times() -> None:
         0.97,
         0.95,
         "Complexity Legend\n"
-        r"parse:          $\Theta(n_i)$,  $n_i$ = instr. count" "\n"
-        r"cfg build:     $\Theta(n_b)$,  $n_b$ = block count" "\n"
-        r"trace:           $\Theta(n_b)$" "\n"
+        r"parse:          $\Theta(n_i)$,  $n_i$ = instr. count"
+        "\n"
+        r"cfg build:     $\Theta(n_b)$,  $n_b$ = block count"
+        "\n"
+        r"trace:           $\Theta(n_b)$"
+        "\n"
         r"stack build:  $O(d)$,  $d$ = call depth",
         transform=ax.transAxes,
         fontsize=9,

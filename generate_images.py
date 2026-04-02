@@ -22,6 +22,7 @@ Usage:
 """
 
 import atexit
+import os
 import subprocess
 import sys
 import tempfile
@@ -29,7 +30,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 try:
-    import cairosvg
+    import cairosvg  # type: ignore[import-untyped]
 except ImportError:
     sys.exit("cairosvg not found. Install with: pip install --break-system-packages cairosvg")
 
@@ -61,7 +62,7 @@ def _start_xvfb() -> str:
 
 def drawio_to_pdf(src: Path, dst: Path, page_index: int = 0, display: str = ":99") -> None:
     """Export a .drawio file to PDF using the draw.io CLI."""
-    env = {**__import__("os").environ, "DISPLAY": display}
+    env: dict[str, str] = {**os.environ, "DISPLAY": display}
     result = subprocess.run(
         [
             "drawio",
@@ -97,7 +98,7 @@ def _remove_watermark(root: ET.Element) -> int:
 
 
 def svg_to_pdf(svg: Path, pdf: Path) -> None:
-    cairosvg.svg2pdf(url=str(svg), write_to=str(pdf))
+    cairosvg.svg2pdf(url=str(svg), write_to=str(pdf))  # type: ignore[attr-defined]
 
 
 def plantuml_to_pdf(puml: Path, pdf: Path) -> None:
