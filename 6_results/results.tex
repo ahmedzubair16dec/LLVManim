@@ -141,7 +141,7 @@ End-to-end (entrypoints)        & 6   \\ \hline
 
 
 
-Line coverage stands at 84\% across the entire \texttt{llvmanim} package. Fig.~\ref{fig:coverage_by_module} shows per-module coverage and Fig.~\ref{fig:tests_per_module} shows the test distribution across modules. A four-stage quality gate runs on every pull request:
+Line coverage stands at 84\% across the entire \texttt{llvmanim} package. Fig.~\ref{fig:coverage_by_module} (Appendix~\ref{app:metrics_figures}) shows per-module coverage and Fig.~\ref{fig:tests_per_module} shows the test distribution across modules. A four-stage quality gate runs on every pull request:
 \begin{enumerate}
     \item \textbf{Ruff}: Linting and import sorting
     \item \textbf{Pyright}: Static type checking (strict mode)
@@ -152,14 +152,14 @@ Line coverage stands at 84\% across the entire \texttt{llvmanim} package. Fig.~\
 
 
 \subsection{Codebase Size}
-The LLVManim codebase comprises 3{,}189 lines of Python across 18 modules. Fig.~\ref{fig:lines_of_code} shows the breakdown by layer and module. The Render layer accounts for 42\% of the code, followed by Ingest (25\%), Transform (19\%), and CLI (14\%).
+The LLVManim codebase comprises 3{,}189 lines of Python across 18 modules. Fig.~\ref{fig:lines_of_code} (Appendix~\ref{app:metrics_figures}) shows the breakdown by layer and module. The Render layer accounts for 42\% of the code, followed by Ingest (25\%), Transform (19\%), and CLI (14\%).
 
 
 
 \subsection{Performance}
 All pipeline stages exhibit linear scaling behavior, confirming that LLVManim can handle realistically sized LLVM IR inputs. Benchmarks use synthetic IR programs with controlled instruction and block counts (median of 5 runs per data point).
 
-Fig.~\ref{fig:pipeline_latency} shows the relative wall-clock cost of each pipeline stage for a 50-block CFG. The Ingest stage (\texttt{parse\_module\_to\_events}) dominates at 11.6\,ms, while all Transform stages complete in under 0.25\,ms. Fig.~\ref{fig:parse_scaling} confirms that parse time scales linearly with instruction count---$\Theta(n)$ where $n$ is the number of IR instructions.
+Fig.~\ref{fig:pipeline_latency} (Appendix~\ref{app:metrics_figures}) shows the relative wall-clock cost of each pipeline stage for a 50-block CFG. The Ingest stage (\texttt{parse\_module\_to\_events}) dominates at 11.6\,ms, while all Transform stages complete in under 0.25\,ms. Fig.~\ref{fig:parse_scaling} confirms that parse time scales linearly with instruction count---$\Theta(n)$ where $n$ is the number of IR instructions.
 
 
 
