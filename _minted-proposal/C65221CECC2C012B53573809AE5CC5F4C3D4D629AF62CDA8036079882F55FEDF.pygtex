@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+git\PYG{+w}{ }clone\PYG{+w}{ }https://github.com/BenHoule/LLVManim.git
+\PYG{n+nb}{cd}\PYG{+w}{ }LLVManim
+uv\PYG{+w}{ }sync\PYG{+w}{ }\PYGZhy{}\PYGZhy{}dev
+\PYG{c+c1}{\PYGZsh{} run all 4 quality gates}
+./scripts/quality\PYGZhy{}check.sh
+\PYG{c+c1}{\PYGZsh{} Create coverage and LoC figures.}
+./uv\PYG{+w}{ }run\PYG{+w}{ }python\PYG{+w}{ }docs/metrics/generate\PYGZus{}metrics.py
+\PYG{c+c1}{\PYGZsh{} Create pipeline latency and scaling figures.}
+./uv\PYG{+w}{ }run\PYG{+w}{ }python\PYG{+w}{ }docs/metrics/generate\PYGZus{}perf\PYGZus{}metrics.py
+\end{Verbatim}

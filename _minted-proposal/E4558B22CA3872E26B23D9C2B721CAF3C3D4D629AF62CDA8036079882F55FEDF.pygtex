@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Export JSON scene graph + Graphviz DOT/PNG}
+uv\PYG{+w}{ }run\PYG{+w}{ }llvmanim\PYG{+w}{ }input.ll\PYG{+w}{ }\PYGZhy{}\PYGZhy{}json\PYG{+w}{ }\PYGZhy{}\PYGZhy{}draw\PYG{+w}{ }\PYGZhy{}\PYGZhy{}outdir\PYG{+w}{ }out/
+\PYG{c+c1}{\PYGZsh{} Render basic stack animation}
+uv\PYG{+w}{ }run\PYG{+w}{ }llvmanim\PYG{+w}{ }input.ll\PYG{+w}{ }\PYGZhy{}\PYGZhy{}animate\PYG{+w}{ }\PYGZhy{}\PYGZhy{}ir\PYGZhy{}mode\PYG{+w}{ }basic\PYG{+w}{ }\PYGZhy{}\PYGZhy{}outdir\PYG{+w}{ }out/
+\PYG{c+c1}{\PYGZsh{} Render rich IR spotlight with SSA panel}
+uv\PYG{+w}{ }run\PYG{+w}{ }llvmanim\PYG{+w}{ }input.ll\PYG{+w}{ }\PYGZhy{}\PYGZhy{}animate\PYG{+w}{ }\PYGZhy{}\PYGZhy{}ir\PYGZhy{}mode\PYG{+w}{ }rich\PYGZhy{}ssa\PYG{+w}{ }\PYGZhy{}\PYGZhy{}speed\PYG{+w}{ }\PYG{l+m}{1}.5\PYG{+w}{ }\PYGZhy{}\PYGZhy{}outdir\PYG{+w}{ }out/
+\PYG{c+c1}{\PYGZsh{} CFG traversal animation}
+uv\PYG{+w}{ }run\PYG{+w}{ }llvmanim\PYG{+w}{ }input.ll\PYG{+w}{ }\PYGZhy{}\PYGZhy{}cfg\PYGZhy{}animate\PYG{+w}{ }\PYGZhy{}\PYGZhy{}dot\PYGZhy{}cfg\PYG{+w}{ }main.dot\PYG{+w}{ }\PYGZhy{}\PYGZhy{}import\PYGZhy{}trace\PYG{+w}{ }trace.json\PYG{+w}{ }\PYGZhy{}\PYGZhy{}outdir\PYG{+w}{ }out/
+\end{Verbatim}
