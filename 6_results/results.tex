@@ -12,26 +12,26 @@ Table~\ref{tab:features} summarizes the proposed features from the original proj
 \begin{tabularx}{\columnwidth}{|X|c|}
 \hline
 \rowcolor[HTML]{4472C4}
-\textcolor{white}{\textbf{Feature}} & \textcolor{white}{\textbf{Status}} \\ \hline
-CLI accepting \texttt{.ll} files               & \checkmark \\ \hline
-LLVM IR parsing via \texttt{llvmlite}          & \checkmark \\ \hline
-Typed CFG edge extraction                       & \checkmark \\ \hline
-Intermediate scene graph                        & \checkmark \\ \hline
-JSON scene graph export                         & \checkmark \\ \hline
-Graphviz DOT/PNG export                         & \checkmark \\ \hline
-Basic stack animation                           & \checkmark \\ \hline
-Rich IR spotlight animation                     & \checkmark \\ \hline
-Rich-SSA 3-column animation                     & \checkmark \\ \hline
-CFG traversal animation                         & \checkmark \\ \hline
-Runtime trace import/export                     & \checkmark \\ \hline
-Domtree/loop metadata import                    & \checkmark \\ \hline
-GIF output with palette workflow                & \checkmark \\ \hline
-Adjustable animation speed                      & \checkmark \\ \hline
-Automatic C compilation                         & $\times$   \\ \hline
-Interactive stepping/pause                      & $\times$   \\ \hline
-YAML configuration files                        & $\times$   \\ \hline
-Color palette selection                         & $\times$   \\ \hline
-GUI                                             & $\times$   \\ \hline
+\textcolor{white}{\textbf{Feature}}   & \textcolor{white}{\textbf{Status}} \\ \hline
+CLI accepting \texttt{.ll} files      & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+LLVM IR parsing via \texttt{llvmlite} & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Typed CFG edge extraction             & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Intermediate scene graph              & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+JSON scene graph export               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Graphviz DOT/PNG export               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Basic stack animation                 & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Rich IR spotlight animation           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Rich-SSA 3-column animation           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+CFG traversal animation               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Runtime trace import/export           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Domtree/loop metadata import          & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+GIF output with palette workflow      & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Adjustable animation speed            & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Automatic C compilation               & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+Interactive stepping/pause            & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+YAML configuration files              & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+Color palette selection               & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+GUI                                   & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
 \end{tabularx}
 \end{table}
 
@@ -137,11 +137,11 @@ The LLVManim implementation is validated by 302 automated tests organized into f
 \hline
 \rowcolor[HTML]{4472C4}
 \textcolor{white}{\textbf{Category}} & \textcolor{white}{\textbf{Count}} \\ \hline
-Unit (ingest, transform)        & 192 \\ \hline
-Integration (present, cli, pipeline) & 96 \\ \hline
-Contract (export boundaries)    & 8   \\ \hline
-End-to-end (entrypoints)        & 6   \\ \hline
-\textbf{Total}                  & \textbf{302} \\ \hline
+Unit (ingest, transform)             & 192 \\ \hline
+Integration (present, cli, pipeline) & 96  \\ \hline
+Contract (export boundaries)         &  8  \\ \hline
+End-to-end (entrypoints)             &  6  \\ \hline
+\textbf{Total}                       & \textbf{302} \\ \hline
 \end{tabularx}
 \end{table}
 
