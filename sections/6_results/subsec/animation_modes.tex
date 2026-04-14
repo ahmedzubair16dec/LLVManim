@@ -1,0 +1,68 @@
+LLVManim provides three stack-focused animation modes and one graph-based mode, each reproducible with a single CLI command. Fig.~\ref{fig:animation_modes} shows representative frames from all three stack modes. The LLVM~IR input file (\texttt{double.ll}) used to produce all sample outputs is listed in Appendix~\ref{app:metrics}.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{basic_mode_frame}
+\caption{Basic mode: stack-only view with per-cell badge flash during a \texttt{call} to \texttt{@init}.}
+\label{fig:basic_mode}
+\end{figure*}
+
+\FloatBarrier
+\textbf{Basic mode} (\texttt{-{}-ir-mode basic}) renders a minimal stack-only view. Each IR instruction triggers a per-cell badge flash on the corresponding stack slot, providing a clean visual pulse of execution without additional clutter. This mode is best suited for audiences who need only a high-level sense of execution flow, such as introductory lectures or quick demonstrations, since it strips away all source-level detail and focuses purely on the call stack.
+\needspace{2\baselineskip}
+\begin{minted}[
+  autogobble,
+  frame=single,
+  bgcolor=listingbg,
+  breaklines=true,
+  fontsize=\footnotesize,
+]{bash}
+uv run llvmanim double.ll --animate --ir-mode basic --outdir out/
+\end{minted}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{rich_mode_frame}
+\caption{Rich mode: two-column layout with IR source spotlight alongside the stack.}
+\label{fig:rich_mode}
+\end{figure*}
+
+\textbf{Rich mode} (\texttt{-{}-ir-mode rich}) extends the basic view with a two-column layout. An IR source panel on the left displays the current function's instructions while a spotlight cursor tracks the executing line, giving the audience both the ``what'' (the stack) and the ``where'' (the source). This mode is particularly valuable when the presenter wants to walk through specific IR constructs---for example, showing how a series of \texttt{alloca} and \texttt{store} instructions initialize local variables before a loop body executes. The spotlight cursor provides a natural focal point that guides the viewer's attention through the code.
+\begin{minted}[
+  autogobble,
+  frame=single,
+  bgcolor=listingbg,
+  breaklines=true,
+  fontsize=\footnotesize,
+]{bash}
+uv run llvmanim double.ll --animate --ir-mode rich --outdir out/
+\end{minted}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{rich_ssa_mode_frame}
+\caption{Rich-SSA mode: three-column layout showing computed SSA values for \texttt{load} and \texttt{icmp} instructions.}
+\label{fig:rich_ssa_mode}
+\end{figure*}
+
+\textbf{Rich-SSA mode} (\texttt{-{}-ir-mode rich-ssa}) takes the rich layout a step further with a dedicated third column for SSA values (IR Source $\mid$ SSA Values $\mid$ Stack). The center panel displays the symbolic result of each binary operation, comparison, or load as it executes, making it possible to follow data dependencies without mentally resolving \texttt{\%}-names. This is the most detailed mode and targets audiences already familiar with SSA form---for instance, a compiler course where students need to see how \texttt{\%4 = icmp slt i32 \%2, \%3} evaluates during a loop iteration.
+\begin{minted}[
+  autogobble,
+  frame=single,
+  bgcolor=listingbg,
+  breaklines=true,
+  fontsize=\footnotesize,
+]{bash}
+uv run llvmanim double.ll --animate --ir-mode rich-ssa --outdir out/
+\end{minted}
+
+\textbf{CFG traversal} (\texttt{-{}-cfg-animate}) renders an animated walk through the control-flow graph, using Graphviz DOT layout for node positions and a runtime trace for the traversal order:
+\begin{minted}[
+  autogobble,
+  frame=single,
+  bgcolor=listingbg,
+  breaklines=true,
+  fontsize=\footnotesize,
+]{bash}
+uv run llvmanim double.ll --cfg-animate --dot-cfg main.dot --import-trace trace.json --outdir out/
+\end{minted}

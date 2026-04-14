@@ -1,0 +1,14 @@
+LLVManim classifies each LLVM IR instruction into one of nine \texttt{EventKind} categories:
+
+\begin{itemize}
+    \item \texttt{alloca}: Stack memory allocation
+    \item \texttt{load} / \texttt{store}: Memory read and write operations
+    \item \texttt{binop}: Binary arithmetic operations (\texttt{add}, \texttt{sub}, \texttt{mul}, etc.)
+    \item \texttt{compare}: Integer and floating-point comparisons (\texttt{icmp},~\texttt{fcmp})
+    \item \texttt{call}: Function invocations
+    \item \texttt{ret}: Function returns
+    \item \texttt{br}: Branch instructions (conditional and unconditional)
+    \item \texttt{other}: Unsupported or unrecognized instructions (skipped with a~diagnostic message)
+\end{itemize}
+
+CFG edge extraction supports five terminator types: \texttt{br}, \texttt{switch}, \texttt{invoke}, \texttt{indirectbr}, and \texttt{callbr}. Conditional branches are labeled with T/F direction annotations.

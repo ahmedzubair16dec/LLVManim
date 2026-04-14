@@ -26,9 +26,12 @@
 \usepackage{placeins}
 \usepackage{minted}
 \usemintedstyle{vs} % Choose a style like colorful, friendly, or bw
+\usepackage{import}
+\usepackage{pgfornament}
 \usepackage{LLVManim}
 
 \begin{document}
+
 
 \title{Presentable Debugging with LLVManim}
 \thispagestyle{plain}
@@ -75,13 +78,33 @@ $\bullet$~Applied computing $\rightarrow$ Education $\rightarrow$ Interactive le
 program visualization, code animation, LLVM, static analysis, control flow graphs, memory visualization, educational tools, Manim, compiler infrastructure, presentation tools
 \end{IEEEkeywords}
 
-\input{1_introduction/introduction}
-\input{2_existing_tools/existing_tools}
-\input{3_manim/manim}
-\input{4_llvmanim/llvmanim}
-\input{6_results/results}
-\input{7_discussion/discussion}
-\input{8_conclusion/conclusion}
+\section{Introduction}
+\label{sec:introduction}
+\import{sections/1_introduction/}{introduction.tex}
+
+\section{Related Work}
+\label{sec:related_work}
+\import{sections/2_related_work/}{existing_tools.tex}
+
+\section{Manim}
+\label{sec:manim}
+\import{sections/3_manim/}{manim.tex}
+
+\section{LLVManim System Design}
+\label{sec:llvmanim}
+\import{sections/4_llvmanim/}{llvmanim.tex}
+
+\section{Results}
+\label{sec:results}
+\import{sections/6_results/}{results.tex}
+
+\section{Discussion and Lessons Learned}
+\label{sec:discussion}
+\import{sections/7_discussion/}{discussion.tex}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\import{sections/8_conclusion/}{conclusion.tex}
 
 \section*{Acknowledgment}
 We would like to thank Dr. James Daly for his guidance, feedback, and support throughout the development of this work.
@@ -89,24 +112,25 @@ We would like to thank Dr. James Daly for his guidance, feedback, and support th
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
-\newpage
-\appendices\onecolumn
+\newpage \appendices \onecolumn
+
 \section{Projected Timeline}
 \label{app:timeline}
-\input{appendix/timeline}
+\import{appendices/}{timeline.tex}
 
 \section{Input File: \texttt{double.ll}}
 \label{app:metrics}
-\input{appendix/code_examples}
+\import{appendices/}{code_examples.tex}
 
 \newpage
+
 \section{Figures for Metrics}
 \label{app:metrics_figures}
-\input{appendix/metrics_figures}
+\import{appendices/}{metrics_figures.tex}
 
 \twocolumn[\section{Feedback}]
 \label{app:feedback}
-\input{appendix/feedback}
+\import{appendices/}{feedback.tex}
 
 \vspace{2em}
 

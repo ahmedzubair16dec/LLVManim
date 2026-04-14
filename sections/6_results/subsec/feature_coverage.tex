@@ -1,0 +1,35 @@
+Table~\ref{tab:features} summarizes the proposed features from the original project goals alongside their implementation status.
+
+\begin{table}[htbp]
+\caption{Proposed vs.\ Implemented Features}
+\label{tab:features}
+\centering
+\renewcommand{\arraystretch}{1.3}
+\rowcolors{2}{white}{gray!10}
+\begin{tabularx}{\columnwidth}{|X|c|}
+\hline
+\rowcolor[HTML]{4472C4}
+\textcolor{white}{\textbf{Feature}}   & \textcolor{white}{\textbf{Status}} \\ \hline
+CLI accepting \texttt{.ll} files      & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+LLVM IR parsing via \texttt{llvmlite} & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Typed CFG edge extraction             & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Intermediate scene graph              & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+JSON scene graph export               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Graphviz DOT/PNG export               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Basic stack animation                 & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Rich IR spotlight animation           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Rich-SSA 3-column animation           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+CFG traversal animation               & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Runtime trace import/export           & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Domtree/loop metadata import          & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+GIF output with palette workflow      & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Adjustable animation speed            & \textcolor[HTML]{00AA00}{\checkmark} \\ \hline
+Automatic C compilation               & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+Interactive stepping/pause            & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+YAML configuration files              & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+Color palette selection               & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+GUI                                   & \textcolor[HTML]{AA0000}{$\times$}   \\ \hline
+\end{tabularx}
+\end{table}
+
+Of the originally proposed proof-of-concept targets, all were achieved except automatic C-to-IR compilation (users supply \texttt{.ll} files directly) and interactive stepping. The three-column SSA panel and CFG traversal animation were implemented as additional capabilities beyond the original scope.

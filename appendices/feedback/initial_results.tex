@@ -1,0 +1,169 @@
+%! UNADDRESSED
+\feedback{Make sure that you explain what DOT and CFG are.}
+{}
+
+%! UNADDRESSED
+\feedback{Are these [.ll files] the LLVM intermediate files?}
+{}
+
+% ADDRESSED(?) - Updated figure
+\feedback{[Sequence diagram] figure text is a little small.}
+{}
+
+%! UNADDRESSED
+\feedback{These [<<literal>> blocks] are enumerations?}
+{}
+
+% ADDRESSED - Updated table formatting
+\feedback{Coloring to make the checkmarks and crosses more distinct would be helpful.}
+{}
+
+% ADDRESSED - Increased figure sizes
+\feedback{Most of the text in the [LLVManim output] figures is unreadable. I think larger single-column images would be better since you don't have page constraints.  Also, if you can output into light-mode, it would be better for print.}
+{}
+
+\feedbackdivider
+
+%! UNADDRESSED
+\feedback{What is this [sentence in section 1] referring to? It's better to clarify the subject.}
+{}
+
+%! UNADDRESSED
+\feedback{You are using acronyms without defining them first.}
+{}
+
+%! UNADDRESSED
+\feedback{Why are these in a different color? The light gray makes it harder to read on a white background.}
+{}
+
+%! UNADDRESSED
+\feedback{This could be a little more clear. Does this mean that the feature has already been implemented or that it's being worked on.}
+{}
+
+% ADDRESSED - Updated figures
+\feedback{It's hard to make out the [LLVManim output] code because it's too small.}
+{}
+
+\feedbackdivider
+
+%! UNADDRESSED
+\feedback{This is a strong paper that clearly shows significant progress and a working system. The project demonstrates a fully functional pipeline, multiple visualization modes, and solid testing infrastructure, which aligns well with the assignment's goal of showing that your methodology and tools are operational.}
+{}
+
+%! UNADDRESSED
+\feedback{One area to improve is how the results are framed. The section reads more like a final report rather than “initial results,” so it would help to explicitly connect what has been implemented to your original project goals and what you intended to achieve at this stage.}
+{}
+
+%! UNADDRESSED
+\feedback{Since the goal of the project is to improve presentation and understanding, it would strengthen the report to include some discussion of how effective the visualizations are for users, even if only informally.}
+{}
+
+%! UNADDRESSED
+\feedback{The figures showing the animation outputs are clear and helpful, but improving readability and consistency across all figures would make the document stronger overall.}
+{}
+
+%! UNADDRESSED
+\feedback{The reproducibility and testing aspects are very well done and clearly demonstrate strong development practices.}
+{}
+
+%! UNADDRESSED
+\feedback{Overall, this is a well-developed and technically solid initial results paper. Strengthening the connection between your results and the project's intended impact would make it even more compelling.}
+{}
+
+\feedbackdivider
+
+%! UNADDRESSED
+\feedback{How are the most common instructions determined?}
+{}
+
+%! UNADDRESSED
+\feedback{Why inlude uv run in CLI example, when that will only work from the project source?}
+{}
+
+%! UNADDRESSED
+\feedback{These packages will be different by distro, so I would either specify the distro that these packages are for, or just the names of the libraries and let the user determine the package name.}
+{}
+
+%! UNADDRESSED
+\feedback{Consider including double.c to help the understanding of those who are less familiar with LLVM.}
+{}
+
+%! UNADDRESSED
+\feedback{Line numbering breaks page margins.}
+{}
+
+%! UNADDRESSED
+\feedback{In Grey-scale it is almost imposible to tell the difference between the purple and blue. I would consider using a symbol to distinguish the layers instead of colour.}
+{}
+
+%! UNADDRESSED
+\feedback{It is also difficult to tell the difference between the green and orange in grey-scale.}
+{}
+
+%! UNADDRESSED
+\feedback{Does not address feedback from Proofreading - Architecture}
+{}
+
+\feedbackdivider
+
+%! UNADDRESSED
+\feedback{In addition to ordering issues, the document occasionally shifts between proposal-style language and results-style language, which makes it feel slightly inconsistent in tone. Some sections describe planned behavior, while others describe completed implementation. Keeping the tense consistent would improve overall readability and make the integration feel more polished.}
+{}
+
+%! UNADDRESSED
+\feedback{Another improvement would be to briefly summarize the full workflow in one paragraph near the
+end of the introduction. While each section explains its role well, a single high-level
+“start-to-finish” explanation would help make it easier to understand how all parts connect.}
+{}
+
+%! UNADDRESSED
+\feedback{Beyond alignment and ordering, the architecture section could benefit from explicit labeling of data types moving between layers. While the diagram shows components clearly, the specific forms of data are not always emphasized in the narrative explanation.}
+{}
+
+%! UNADDRESSED
+\feedback{Also, some terminology used in diagrams (such as SceneGraph, AnimationCommand, and TraceOverlay) appears in technical detail later but could be briefly defined earlier in the architecture section to improve readability.}
+{}
+
+%! UNADDRESSED
+\feedback{It would help to include one short example of a full user session, from command execution to generated output files. The current examples demonstrate commands clearly, but showing the result (such as filenames created or output directory structure) would make expected behavior easier to understand. It may also help to briefly describe expected failure behavior, such as what happens when invalid IR is supplied. While error handling is mentioned, an example error scenario would improve clarity.}
+{}
+
+%! UNADDRESSED
+\feedback{Another improvement would be to include one short usage example showing how a developer might extend the scene graph or animation behavior. This could be pseudocode demonstrating how a new animation command or visualization component would be added.}
+{}
+
+%! UNADDRESSED
+\feedback{Also, it would be useful to specify whether the scene graph format is stable or experimental, since this affects how safely other developers could rely on it.}
+{}
+
+%! UNADDRESSED
+\feedback{Beyond runtime vs development dependencies, it would be helpful to describe version sensitivity as for example, whether specific versions of Python, LLVM, or Manim are required. The document mentions Python 3.12, but similar version notes for other tools would reduce setup uncertainty. Additionally, identifying optional dependencies (such as Graphviz for visualization export) separately from required ones would make installation expectations clearer.}
+{}
+
+%! UNADDRESSED
+\feedback{While responsibilities are assigned in the timeline, it may also help to include a brief summary table listing each team member and their primary responsibility area. This would make roles easier to reference without scanning the full timeline. Another possible addition would be a short note describing collaboration expectations, such as shared ownership of integration or testing tasks.}
+{}
+
+%! UNADDRESSED
+\feedback{In addition to adding project-management risks, another useful addition would be identifying technical dependency risks, such as reliance on external libraries (Manim or LLVM tooling). Explaining what fallback plan exists if these tools behave unexpectedly would strengthen the risk discussion.}
+{}
+
+%! UNADDRESSED
+\feedback{It would also be helpful to rank risks by relative severity or likelihood, rather than listing them equally. This would make mitigation planning appear more deliberate.}
+{}
+
+%! UNADDRESSED
+\feedback{In addition to adding testing schedules, the timeline could benefit from explicit integration milestones, where components from different layers are combined and validated together. This is especially important in multi-layer architectures.}
+{}
+
+%! UNADDRESSED
+\feedback{Another useful addition would be identifying checkpoint deliverables, such as demo-ready versions at specific weeks, to make progress easier to measure.}
+{}
+
+%! UNADDRESSED
+\feedback{Beyond scaling concerns, figure captions could be improved by including short explanations of why each figure matters, not just what it shows. Some captions describe the content but do not explain its significance to the system design.}
+{}
+
+%! UNADDRESSED
+\feedback{Additionally, several figures contain dense technical details that might benefit from progressive disclosure, such as introducing a simplified diagram first and then a more detailed version later.}
+{}

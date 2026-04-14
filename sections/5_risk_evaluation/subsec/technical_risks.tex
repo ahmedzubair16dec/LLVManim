@@ -1,0 +1,25 @@
+\begin{itemize}
+  \item \textbf{LLVM IR Complexity:} LLVM IR supports a wide range of constructs, including vector operations, intrinsics, and optimization-introduced transformations. LLVManim targets a common subset of instructions for the initial implementation.
+  \begin{itemize}
+    \item \textit{Risk:} Unsupported constructs may cause parsing failures or incomplete visualizations.
+    \item \textit{Mitigation:} Restrict the MVP to unoptimized \texttt{-O0} IR and provide clear diagnostic messages when encountering unsupported instructions.
+  \end{itemize}
+
+  \item \textbf{Manim Performance:} Manim provides high-quality animations but can be computationally expensive, especially for scenes with many objects or transitions.
+  \begin{itemize}
+    \item \textit{Risk:} Long render times may slow development and limit iterative testing.
+    \item \textit{Mitigation:} Use low-quality preview rendering during development and reserve high-quality output for final deliverables.
+  \end{itemize}
+
+  \item \textbf{Cross-Platform Compatibility:} Achieving consistent LLVManim behavior across operating systems and development environments can be challenging.
+  \begin{itemize}
+    \item \textit{Risk:} Platform-specific issues may arise and cause inconsistent behavior or failures.
+    \item \textit{Mitigation:} Use cross-platform libraries and conduct testing on multiple platforms to ensure compatibility.
+  \end{itemize}
+
+  \item \textbf{Dependency Fragility:} LLVManim depends on Clang, LLVMlite, and Manim, each of which may introduce version incompatibilities or platform-specific issues.
+  \begin{itemize}
+    \item \textit{Risk:} Changes in LLVM or Manim APIs could break LLVManim's functionality.
+    \item \textit{Mitigation:} Provide a reproducible environment via containerization or a standardized setup script.
+  \end{itemize}
+\end{itemize}

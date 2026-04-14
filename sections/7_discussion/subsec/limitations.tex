@@ -1,0 +1,11 @@
+The current implementation has several known limitations:
+
+\begin{itemize}
+    \item \textbf{Double-pop bug:} Under certain control-flow patterns involving consecutive returns, the basic animation mode may attempt to pop the stack twice for a single \texttt{ret} instruction. This is tracked as a known issue.
+
+    \item \textbf{Symbolic-only SSA values:} The rich-SSA panel displays symbolic operand names (e.g., \texttt{\%3 = add \%1, \%2}) rather than concrete runtime values. A single swap-point in \texttt{ssa\_formatting.py} exists for when numeric runtime values are plumbed through in a future version.
+
+    \item \textbf{No heap visualization:} The tool visualizes stack operations but does not yet render heap allocations or pointer-based data structures.
+
+    \item \textbf{Manim render times:} Full-quality Manim renders can take significant time for programs with many instructions. The \texttt{-{}-speed} flag and low-quality preview mode help during development, but render time remains a practical constraint for large programs.
+\end{itemize}

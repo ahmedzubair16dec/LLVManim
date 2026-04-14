@@ -1,0 +1,27 @@
+The LLVManim implementation is validated by 302 automated tests organized into four marker categories:
+
+\begin{table}[htbp]
+\caption{Test Distribution by Category}
+\label{tab:tests}
+\centering
+\renewcommand{\arraystretch}{1.3}
+\rowcolors{2}{white}{gray!10}
+\begin{tabularx}{\columnwidth}{|X|c|}
+\hline
+\rowcolor[HTML]{4472C4}
+\textcolor{white}{\textbf{Category}} & \textcolor{white}{\textbf{Count}} \\ \hline
+Unit (ingest, transform)             & 192 \\ \hline
+Integration (present, cli, pipeline) &  96 \\ \hline
+Contract (export boundaries)         &   8 \\ \hline
+End-to-end (entrypoints)             &   6 \\ \hline
+\textbf{Total}                       & \textbf{302} \\ \hline
+\end{tabularx}
+\end{table}
+
+Line coverage stands at 84\% across the entire \texttt{llvmanim} package. Fig.~\ref{fig:coverage_by_module} (Appendix~\ref{app:metrics_figures}) shows per-module coverage and Fig.~\ref{fig:tests_per_module} shows the test distribution across modules. A four-stage quality gate runs on every pull request:
+\begin{enumerate}
+    \item \textbf{Ruff}: Linting and import sorting
+    \item \textbf{Pyright}: Static type checking (strict mode)
+    \item \textbf{import-linter}: Architectural boundary enforcement between layers
+    \item \textbf{pytest}: Full test suite execution with coverage reporting
+\end{enumerate}

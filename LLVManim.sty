@@ -1,8 +1,16 @@
-\definecolor{listingbg}{gray}{0.97}
-\definecolor{listingrule}{gray}{0.80}
-\definecolor{listingcomment}{rgb}{0.00,0.40,0.00}
-\definecolor{listingstring}{rgb}{0.55,0.10,0.10}
-\definecolor{listingkeyword}{rgb}{0.00,0.20,0.60}
+% LLVManim.sty - Custom LaTeX style for LLVM IR visualization and feedback management
+% This package provides:
+% - Syntax highlighting for LLVM IR code listings using the listings package
+% - Custom commands for managing feedback and TODOs in the document
+% - Color definitions for consistent styling of code and feedback sections
+\ProvidesPackage{LLVManim}[2024/06/01 v1.0 Custom style for LLVManim paper]
+
+% Define default colors for code listings
+\definecolor{listingbg}{gray}{0.97}  % Light gray background
+\definecolor{listingrule}{gray}{0.80}  % Gray for frame rules
+\definecolor{listingcomment}{rgb}{0.00,0.40,0.00}  % Green for comments
+\definecolor{listingstring}{rgb}{0.55,0.10,0.10}  % Reddish for strings
+\definecolor{listingkeyword}{rgb}{0.00,0.20,0.60}  % Blue for keywords
 \lstset{
     basicstyle=\ttfamily\footnotesize,
     breaklines=true,
@@ -25,7 +33,7 @@
     postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
 }
 
-\newcommand{\TODO}[1]{\textbf{TODO (#1): }}
+% Command for creating feedback/response blocks
 \newcounter{feedbackcount}
 \newcommand{\feedbackset}[1]{\setcounter{feedbackcount}{#1}}
 \newcommand{\feedback}[2]{%
@@ -40,7 +48,22 @@
         \vspace{1em}
     }%
 }
-\newcommand{\feedbackdivider}{\noindent\hrulefill\par}
+
+% For separating feedback for the same submission from different reviewers
+\newcommand{\feedbackdivider}{\centering\noindent\rule{0.8\linewidth}{0.5pt}\par}
+
+% For separating feedback from different submissions
+\newcommand{\feedbackdividerfancy}[]{
+  \vspace{.5\baselineskip} {
+    \resizebox{\linewidth}{2ex}{
+      \begin{tikzpicture}
+        \node  (C) at (0,0) {};
+        \node (D) at (9,0) {};
+        \path (C) to [ornament=88] (D);
+      \end{tikzpicture}
+    }
+  }
+}
 
 % LLVM IR syntax highlighting
 \lstset{
@@ -109,9 +132,19 @@
   % literate={\#}{{\textcolor{llvmkwC}{\#}}}1,
 }
 
+% BibTeX definition for IEEEtran
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-\graphicspath{ {./images/} {./images/metrics/} {./generated_images/} }
+
+% Graphics paths for figures
+\graphicspath{
+  {./images/}
+  {./images/metrics/}
+  {./images/drawio_output/}
+  {./images/llvmanim_output/}
+}
+
+% Vague formatting adjustments to prevent widows/orphans and improve line breaking
 \raggedbottom
 \emergencystretch=2em
 \hbadness=10000

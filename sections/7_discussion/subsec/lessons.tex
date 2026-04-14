@@ -1,0 +1,9 @@
+\begin{itemize}
+    \item \textbf{TDD was essential for refactors.} The test suite caught regressions immediately when refactoring the IR display model and restructuring the scene graph. Without comprehensive tests, these refactors would have been significantly riskier.
+
+    \item \textbf{Architectural enforcement catches violations early.} \texttt{import-linter} rejected several pull requests that would have introduced cross-layer dependencies, preventing technical debt before it accumulated.
+
+    \item \textbf{Sandbox-driven exploration.} Experimental Manim scripts in the~\texttt{sandbox/} directory allowed rapid prototyping of animation ideas (CFG traversal, register panels) without risking the main~codebase.
+
+    \item \textbf{Typed CFG edges via llvmlite.} Moving from regex-based IR text parsing to \texttt{llvmlite}'s terminator API eliminated an entire class of parsing bugs and made the Ingestion layer robust against IR formatting variations.
+\end{itemize}

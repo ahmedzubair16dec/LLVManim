@@ -1,0 +1,191 @@
+%! UNADDRESSED
+\feedback{Is [PythonTutor] the only such tool that you were able to find?}
+{}
+
+% ADDRESSED - Reworded section
+\feedback {using}
+{}
+
+% ADDRESSED - Increased DPI and scaled up figures
+\feedback{This figure is borderline unreadable.}
+{}
+
+% ADDRESSED - Trimmed down 3b1b paragraph
+\feedback{I'm not sure how valuable this [3Blue1Brown] paragraph is.  It feels like it should be trimmed down and come before the previous one.}
+{}
+
+% ADDRESSED - Removed trace event mapping metric
+\feedback{How is this different than the IR Instruction Coverage core feature?}
+{}
+
+% ADDRESSED - Updated figures & captions
+\feedback{None of the stuff in the caption is represented in the [architecture] figure.}
+{}
+
+% ADDRESSED - Updated figures & captions
+\feedback{The [architecture] figure doesn't really match the text in section IV-b either.}
+{}
+
+% ADDRESSED - Updated figures
+\feedback{This [mock output] figure is not readable.}
+{}
+
+% ADDRESSED - Added double.ll listing and CLI commands to Appendix C
+\feedback{You also need the input (both the source file to be parsed and the command that produces the output)}
+{}
+
+% PARTIALLY ADDRESSED - LLVMLite is included in some diagrams
+\feedback{[LLVMLite is] also not in your diagram.}
+{}
+
+\feedbackdivider
+
+% ADDRESSED - Increased figure size
+\feedback{This [PythonTutor] figure is hard to read because of how small it is.}
+{}
+
+% REFUTED
+\feedback{Some programming languages come with their own quirks which will require language specific support. Doing 30 languages seems like too much for such a short project.}
+{
+  We are not planning to implement language-specific support for 30 languages. We will be targeting LLVM IR as input, which means that any language that compiles through the LLVM toolchain will be supported by default. This includes a wide range of languages, but we do not need to implement specific support for each one.
+}
+
+% ADDRESSED - Updated figures and section text
+\feedback{This [list] should be in the same order as your graph: presentation -> transformation -> ingestion.}
+{}
+
+% REFUTED
+\feedback{Are these the only instructions that will have animation primitives?}
+{
+  They are the instructions targeted by our MVP, support for more instructions would be considered stretch futures. We prioritize instructions based on their frequency in real-world code and their relevance to control flow and memory visualization.
+}
+
+\feedbackdivider
+
+% ADDRESSED - Updated figures and section text
+\feedback{The relationships between components could be explained slightly more clearly. For example, while the diagram shows how data moves between layers, the text could more explicitly describe how the scene graph is passed from the transformation layer into the Manim rendering process. Adding a brief explanation of how the arrows in the architecture diagram correspond to specific data transformations would make the architecture easier to follow.}
+{}
+
+% ADDRESSED - Added more detail to workflow
+\feedback{One area that could be improved is clarifying the expected workflow for users. For example, it could help to describe a short step-by-step scenario showing how a typical user would run LLVManim from start to finish. This would make the interface section feel more concrete and easier to understand for someone unfamiliar with the system.}
+{}
+
+% REFUTED
+\feedback{In some sections the explanation becomes quite technical, particularly when describing LLVM internals. While this shows strong knowledge of the system, some of these details could be shortened slightly so that the focus remains on how the technologies support the architecture rather than on compiler internals themselves.}
+{
+  We believe the current level of technical detail is appropriate for the intended audience, which is expected to have a computer science background. We will continue to monitor the balance between technical depth and overall clarity as we develop the project further.
+}
+
+% ADDRESSED - Updated figures
+\feedback{Some figures appear quite small and may be difficult to read, especially those showing outputs from other tools. Enlarging these figures or simplifying them could improve readability. In addition, including another visual example of the expected LLVManim output could further strengthen the proposal and help readers understand what the final animations will look like.}
+{}
+
+% REFUTED
+\feedback{In a few cases the responses focus more on explaining why the feedback was not implemented rather than demonstrating how the proposal was improved. In some situations, incorporating at least part of the suggested feedback might strengthen the document even further.}
+{
+  We have addressed feedback in the manner prescribed by the project guidelines, which is to either address it or explain why it remains unaddressed. We believe that our explanations for unaddressed feedback are sufficient and that we have made appropriate improvements to the proposal based on the feedback we received.
+}
+
+% ADDRESSED - Updated section on existing tools
+\feedback{One possible improvement would be slightly condensing some of the background sections about existing tools. While they provide useful context, they are quite long compared to the sections describing the system architecture itself.}
+{}
+
+% REFUTED
+\feedback{In a few areas the sentences are quite long and contain multiple ideas at once. Breaking these into shorter sentences could improve readability and make the key points stand out more clearly.}
+{
+  Without specific examples, this feedback is rather difficult to address effectively.
+}
+
+\feedbackdivider
+
+% REFUTED
+\feedback{How are the most common IR instructions being determined? There should probably be a citation if this data came from an outside source.}
+{
+  We do not use any specific analysis or references for determining the most common IR instructions. The "most common" instructions are somewhat self-evident based on the nature of LLVM IR and programs in general. Arithmetic/logic operations, branch instructions, and function calls are fundamental operations that appear frequently in most programs, while more complex instructions like vector operations or atomic instructions are less common and often specific to certain domains.
+}
+
+% ADDRESSED - Specified output formatting
+\feedback{I would specify where the output of this tool will go, either to a file or to stdout. If it is a file, I would suggest a flag to specify a file name.}
+{}
+
+% REFUTED
+\feedback{I would add a flag to override the YAML config file with a provided one.}
+{
+  While we have not gotten to the point of implementing this feature, the intention was always that the path to the YAML file would be provided as a command-line argument, so the user can easily specify a custom configuration file if they choose to do so.
+}
+
+% ADDRESSED - Fixed en-dashes in \texttt blocks (separate -- with -{}-)
+\feedback{These options are shown as single dash long options, but Listing 1 shows long options with two dashes. This should be consistent.}
+{}
+
+% ADDRESSED - Added mention of CLI arg for output format
+\feedback{How does the user specify what format they want from your interface?}
+{}
+
+% REFUTED
+\feedback{If you are using LLVMlite to handle .ll files generated by clang, how do you intend to handle user provided .ll files?}
+{
+  User provided .ll files are supported by default, as long as they conform to the standard LLVM IR syntax.
+}
+
+% REFUTED - NOTE: Should mention in paper that compiling source to LLVM-IR via tool gives us control over flags and debug metadata, instead of relying on users to do so.
+\feedback{Having this project also compile the code to LLVM IR, seems to violate the UNIX philosophy of 'Make each program do one thing well.}
+{
+  We are not planning to implement a full compiler that compiles source code to LLVM IR. Instead, we will be leveraging existing tools in the LLVM ecosystem to handle the compilation process. Our tool will focus on taking LLVM IR as input and generating visualizations from it, which is well within the scope of a single program doing one thing well.
+}
+
+% REFUTED
+\feedback{Consider requiring the user to add a --force flag to generate animations for code with unsupported instructions, so they must take a positive step to use data that may produce inaccurate or malformed results.}
+{
+  This is a reasonable suggestion for future work, but we do not currently have plans to implement this feature. The current IR instruction coverage would require this flag to be used for any non-trivial program, which would create a poor user experience.
+}
+
+%! UNADDRESSED
+\feedback{You do not discuss what platforms you intend to support with this project.}
+{}
+
+%! UNADDRESSED
+\feedback{I would also consider the fact that you provide the intermediate Manim code, so a user could perform manual theming, but still have the animations generated by this tool.}
+{}
+
+% ADDRESSED - Fixed quotation formatting
+\feedback{When nesting quotes, should alternate between single and double quotation marks.}
+{}
+
+\feedbackdivider
+
+% ADDRESSED - Updated figures and section text
+\feedback{The document is now integrated well especially with the addition of the three-layer architecture, risks section, and expanded timeline. However, a few new sections feel appended rather than fully integrated, particularly the order of layers and the placement of diagrams. Reordering to match the architecture narrative would improve coherence.}
+{}
+
+% ADDRESSED - Updated figures and section text
+\feedback{The architecture diagram is helpful and matches the intended three-layer pipeline. However, the diagram order conflicts with the text. This makes the pipeline harder to follow. The layers should be presented in the same order in both the diagram and the Implementation Plan, and the diagram should be explicitly referenced in the text with a short `what the arrows mean, what data flows between layers' explanation.}
+{}
+
+% ADDRESSED - Updated figures and section text
+\feedback{The CLI examples are strong and clearly show how a user interacts with the system. However, the interface requirements also ask how the tool interacts with the larger system it lives within. You could clarify the expected workflow and clearly state what artifacts the user receives.}
+{}
+
+%! UNADDRESSED
+\feedback{Since the current MVP is CLI-based, the document is fine without a GUI mockup. However, because a GUI is listed as a stretch feature, including a small mockup or a brief UI description (even one figure) would strengthen the Interfaces requirement and make the stretch goal more concrete.}
+{}
+
+%! UNADDRESSED
+\feedback{You mention a `Customization API' via flags/YAML and an intermediate `scene graph.' If the scene graph or Manim component library is meant to be reusable, consider documenting it as a small API: what inputs it takes, what it outputs, and how another developer would extend it.}
+{}
+
+%! UNADDRESSED
+\feedback{The listed technologies make sense. The document should clarify which LLVM tools are required at runtime versus only during development. A brief dependency list would make setup expectations clearer.}
+{}
+
+%! UNADDRESSED
+\feedback{The risks section is a strong addition and aligns well with the assignment. A small improvement would be adding one or two project-management risks (scope creep, integration risk between layers, testing burden) and explicitly tying mitigations to your MVP priorities.}
+{}
+
+%! UNADDRESSED
+\feedback{The timeline is significantly improved and now has concrete deliverables and team assignments. However, it still needs explicit scheduling for evaluation/testing. There is also a quick consistency fix for LLVMlite in this section as lowercase needs to be made uppercase to be made consistent.}
+{}
+
+% ADDRESSED - Updated figures
+\feedback{Figures 1 and 2 remain difficult to read due to scaling. If they are only for motivation, you could replace them with cropped `key region' zoom-ins to show the point without unreadably dense text.}
+{}

@@ -1,0 +1,9 @@
+Several architectural decisions shaped the final system:
+
+\textbf{Three-layer separation with import-linter.} Enforcing strict layer boundaries at build time prevented coupling between Ingestion, Transformation, and Rendering. This paid dividends during the IR display model refactor, where the Transformation layer's data structures were restructured without touching any Rendering layer code. The \texttt{import-linter} tool caught accidental cross-layer imports on multiple occasions during development.
+
+\textbf{Display model abstraction.} Rather than having Manim scenes query the scene graph directly, we introduced an explicit display model (the \texttt{TraceStep}/\texttt{RichTraceStep} and \texttt{AnimationCommand} types) that decouples rendering from data extraction. This made it straightforward to add the rich-SSA animation mode by extending the trace step type without modifying existing scene classes.
+
+\textbf{Pipeline approach.} The tool processes data in a linear pipeline: parse $\rightarrow$ build scene graph $\rightarrow$ render or export. This simplified testing because each stage could be exercised independently with deterministic fixtures. The 302 tests in the suite are predominantly unit tests that operate on a single layer.
+
+\textbf{llvmlite for terminator parsing.} Early prototypes used regex-based parsing of LLVM IR text, which proved fragile for edge cases such as \texttt{switch} and \texttt{invoke} terminators. Switching to \texttt{llvmlite}'s Python binding, which exposes the LLVM C~API, made CFG edge extraction reliable across all five terminator types.
