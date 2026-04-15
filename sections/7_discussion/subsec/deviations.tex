@@ -1,8 +1,6 @@
 The following proposed features were not implemented:
 
 \begin{itemize}
-    \item \textbf{Automatic C compilation:} The original proposal envisioned accepting \texttt{.c} files and invoking \texttt{clang} automatically. In practice, requiring users to supply pre-compiled \texttt{.ll} files simplified the tool's scope and avoided platform-specific compiler configuration issues.
-
     \item \textbf{Interactive stepping and pause:} Interactive playback was deprioritized in favor of richer static animation modes. Manim CE's rendering model produces video files rather than interactive sessions, making pause/step less natural.
 
     \item \textbf{YAML configuration and --palette:} Fine-grained customization via YAML files and named color palettes was deferred. The current CLI provides \texttt{-{}-speed} and \texttt{-{}-format} as the primary customization points.
