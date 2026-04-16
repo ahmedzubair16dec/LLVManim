@@ -1,7 +1,7 @@
 \texttt{double.c} is a minimal C program used to generate the example LLVManim output. It defines three functions---\texttt{init}, \texttt{double\_1}, and \texttt{main}---whose control flow, heap allocation, and loop structure exercise all four LLVManim animation modes.
 \inputminted[
   frame=single,
-  bgcolor=listingbg,
+  bgcolor={rgb}{0.95,0.97,1.0}, 
   breaklines=true,
   fontsize=\footnotesize,
   linenos,
@@ -17,7 +17,7 @@
 \texttt{double.ll} is compiled at \texttt{-O0} with full debug info (\texttt{clang -O0 -g -S -emit-llvm double.c}). It is the actual LLVM~IR input used by LLVManim in the examples.
 \inputminted[
   frame=single,
-  bgcolor=listingbg,
+  bgcolor={rgb}{0.95,0.97,1.0},
   breaklines=true,
   fontsize=\footnotesize,
   linenos,
